@@ -5,14 +5,10 @@
 const strip = (md) => md.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
 
 import welcome from '../posts/welcome.md?raw'
-import vite_react from '../posts/vite-react.md?raw'
-import markdown_guide from '../posts/markdown-guide.md?raw'
 import about from '../posts/about.md?raw'
 
 export const posts = [
   { slug: "welcome", title: "ほーむ", date: "2026-08-09", hidden: false, content: strip(welcome) },
-  { slug: "vite-react", title: "Building with Vite & React", date: "2026-08-09", hidden: false, content: strip(vite_react) },
-  { slug: "markdown-guide", title: "Markdown Guide", date: "2026-08-09", hidden: false, content: strip(markdown_guide) },
   { slug: "about", title: "プロファイル", date: "2000-01-01", hidden: true, content: strip(about) },
 ]
 

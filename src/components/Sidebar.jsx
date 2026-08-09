@@ -31,6 +31,10 @@ function NavItem({ item, row, col }) {
   }
 
   const handleClick = (e) => {
+    // clicking the button of the page we're already on: do nothing
+    // (the fade-out would leave the page blank since the route doesn't
+    // change)
+    if (location.pathname === item.to) return
     // navigating from an article to the posts list plays the card morph
     if (item.to === '/posts' && isPostSlug) {
       const card = document.querySelector('.article-card')
