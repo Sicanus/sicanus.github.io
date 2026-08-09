@@ -1,0 +1,937 @@
+/* ============ Design tokens (from blog.fig) ============ */
+:root {
+  --blue-panel: #95ccf2; /* behind bg_blue.svg */
+  --pink-panel: #ffcddc; /* behind bg_pink.svg */
+  --ink-pink: #ffa2b5; /* blog name, markdown h1 */
+  --dash-pink: #ffbad3; /* dashed outlines on cards */
+  --ink-blue: #62b8f3; /* page title */
+  --label-blue: #9ecfff; /* nav labels + dashed outlines */
+  --body-ink: #a64c5f; /* markdown body text */
+  --menu-bg: #abddff; /* context menu card */
+  --menu-dot: #cee7f8; /* menu loading dots */
+  --menu-hover: #ff728f; /* menu item hover */
+  --menu-item: #5ea4d5; /* menu item idle */
+  --highlight: #ffd02e; /* nav active + post card hover highlight */
+  --scroll-track: #ffe7f2; /* scrollbar track + text selection background */
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Rounded Mplus 1c', 'Zen Maru Gothic', system-ui, sans-serif;
+  background: var(--white);
+  color: var(--body-ink);
+}
+
+::selection {
+  background: var(--scroll-track);
+}
+
+/* ============ Layout ============ */
+.app {
+  position: relative;
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+  /* only the markdown body text may be selected */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Backgrounds: both SVGs render full-screen (they overlap completely) and
+   clip-path assigns each one its region — blue on the left 34.062rem panel,
+   pink on the rest. */
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg--blue {
+  background: url('./assets/bg_blue.svg') no-repeat center;
+  background-size: cover;
+  background-color: var(--blue-panel);
+  /* split at the same 28.4% as the sidebar */
+  clip-path: inset(0 71.6% 0 0);
+}
+
+.bg--pink {
+  background: url('./assets/bg_pink.svg') no-repeat center;
+  background-size: cover;
+  background-color: var(--pink-panel);
+  clip-path: inset(0 0 0 28.4%);
+}
+
+/* ============ Left panel (blue) ============ */
+.sidebar {
+  position: relative;
+  /* proportional instead of a fixed 34.062rem — narrows below 1080p */
+  flex: 0 0 28.4%;
+  padding-top: 5.125rem;
+  overflow-y: auto;
+}
+
+.name-card {
+  position: relative;
+  width: 24.000rem;
+  height: 7.312rem;
+  margin: 0 auto;
+  border-radius: 4.719rem;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* blog.fig: drop shadow (5,5), blur 0, spread 5, 40% #74b9e8 */
+  box-shadow: 0.312rem 0.312rem 0 0.312rem rgba(116, 185, 232, 0.4);
+}
+
+.dashed-border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Nav item hover effect: the whole button scales up, and the dashed
+   outline spins a full turn on enter (nav-dash--in) and another full
+   turn back on leave (nav-dash--out). */
+.nav-item {
+  transition: transform 0.25s ease;
+}
+
+.nav-item:hover {
+  transform: scale(1.06);
+}
+
+.nav-dash {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+
+.name-card__text {
+  font-size: 2.500rem;
+  font-weight: 800;
+  color: var(--ink-pink);
+  letter-spacing: 0.02em;
+}
+
+/* ============ Nav grid ============ */
+.nav-grid {
+  width: 24.125rem;
+  margin: 4.438rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, 12.062rem);
+  grid-auto-rows: 12.062rem;
+}
+
+.nav-item {
+  position: relative;
+  border-radius: 7.812rem;
+  background: var(--white);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3.062rem;
+  /* blog.fig: drop shadow (5,5), blur 0, spread 1, 70% #c1dcf7 */
+  box-shadow: 0.312rem 0.312rem 0 0.062rem rgba(193, 220, 247, 0.7);
+}
+
+/* Font Awesome icon, no box and no background */
+.nav-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.750rem;
+  line-height: 1;
+  color: var(--label-blue);
+  transition: color 0.15s ease;
+}
+
+.nav-item__label {
+  margin-top: 0.500rem;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  font-size: 2.000rem;
+  color: var(--label-blue);
+}
+
+/* Highlight state uses the --highlight variable */
+.nav-item--active .nav-item__icon {
+  color: var(--highlight);
+}
+
+.nav-item--active .nav-item__label {
+  color: var(--highlight);
+}
+
+.nav-item--active .nav-dash .dashed-border rect {
+  stroke: var(--highlight);
+}
+
+/* ============ Right panel (pink) ============ */
+.main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* horizontal padding proportional instead of a fixed 8.438rem */
+  padding: 5.125rem 7.03% 2.500rem;
+}
+
+/* title row: back button left, centered title, spacer to keep it truly
+   centered */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 1.250rem;
+  margin-bottom: 1.625rem;
+}
+
+.title-row .page-title {
+  flex: 1;
+  margin: 0;
+}
+
+.title-row__spacer {
+  width: 4.188rem;
+  flex-shrink: 0;
+}
+
+/* back button, styled like an unselected pagination button;
+   hover spins the dashed ring a full turn (WAAPI, see BackButton.jsx) */
+.back-btn {
+  position: relative;
+  width: 4.188rem;
+  height: 4.188rem;
+  flex-shrink: 0;
+  border-radius: 7.812rem;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.625rem;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.back-btn__dash {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+
+.page-title {
+  position: relative;
+  margin: 0 0 1.625rem;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  font-size: 3.000rem;
+  text-align: center;
+  color: var(--ink-blue);
+}
+
+/* Figma effect stack: drop shadow (4,4) 30% #f883ae of the whole glyph
+   (fill + stroke) → 5px white stroke → blue fill. Three layers:
+   the shadow is a pink stroke of the same width, offset by (4,4), so it
+   shows as a ~4px ring just outside the white stroke. */
+.page-title__shadow {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  -webkit-text-stroke: 10px rgba(248, 131, 174, 0.3);
+  transform: translate(0.250rem, 0.250rem);
+}
+
+.page-title__stroke {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  -webkit-text-stroke: 10px var(--white);
+}
+
+.page-title__text {
+  position: relative;
+  display: block;
+  color: var(--ink-blue);
+}
+
+/* ============ Article card ============ */
+.article-card {
+  position: relative;
+  flex-shrink: 0;
+  /* the bottom always extends 5.500rem past the viewport (figma: card
+     bottom 1168 vs viewport 1080), so the bottom corners are clipped.
+     card top = 178 → height = 100dvh + 88 − 178 */
+  height: calc(100dvh - 5.625rem);
+  border-radius: 4.719rem;
+  background: var(--white);
+  padding: 3.562rem 4.688rem 1.250rem;
+  /* blog.fig: 5px solid #ffb5d6 stroke OUTSIDE + drop shadow (15,15),
+     blur 0, 40% #ffb0d4. Shadow projects from the stroked shape, so the
+     offset starts past the ring: 5px stroke + 15px offset. */
+  box-shadow:
+    0 0 0 0.312rem #ffb5d6,
+    1.250rem 1.250rem 0 0 rgba(255, 176, 212, 0.4);
+}
+
+/* ============ Markdown typography ============ */
+.markdown {
+  /* content scrolls within the visible part of the card: viewport
+     minus card top (178 = 82 padding + 70 title + 26 gap) minus the
+     card's vertical padding (57 + 20) */
+  height: calc(100dvh - 15.938rem);
+  overflow-y: auto;
+  padding-right: 0.375rem;
+  font-size: 1.375rem;
+  line-height: 1.3;
+  /* the one place text selection is allowed */
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* date rendered inside the markdown flow (scrolls with the content,
+   not pinned to the card top): small and muted */
+.post-date {
+  margin: 0 0 0.375rem;
+  font-size: 0.875rem;
+  color: #c9abb5;
+}
+
+.markdown__title {
+  margin: 0 0 1.125rem;
+  font-family: 'Rounded Mplus 1c', sans-serif;
+  font-weight: 800;
+  font-size: 2.500rem;
+  color: var(--ink-pink);
+  line-height: 1.3;
+}
+
+.markdown h2 {
+  margin: 1.6em 0 0.6em;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  font-size: 2.000rem;
+  color: var(--ink-pink);
+}
+
+.markdown h3 {
+  margin: 1.5em 0 0.5em;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  font-size: 1.625rem;
+  color: var(--ink-pink);
+}
+
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  color: var(--ink-pink);
+}
+
+.markdown p {
+  margin: 0 0 1em;
+}
+
+.markdown a {
+  color: var(--ink-blue);
+  text-decoration: underline;
+  text-underline-offset: 0.188rem;
+  text-decoration-color: var(--label-blue);
+  transition: color 0.15s ease;
+}
+
+.markdown a:hover {
+  color: #ff466c;
+  text-decoration-color: #ff466c;
+}
+
+.markdown strong {
+  font-weight: 800;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 1.4em;
+  margin: 0 0 1em;
+}
+
+.markdown li {
+  margin: 0.4em 0;
+}
+
+.markdown li > ul,
+.markdown li > ol {
+  margin: 0.2em 0;
+}
+
+.markdown li input[type='checkbox'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-right: 0.5em;
+  vertical-align: -0.125rem;
+  accent-color: var(--menu-hover);
+}
+
+.markdown blockquote {
+  margin: 1.2em 0;
+  padding: 0.875rem 1.125rem;
+  border-left: 4px solid var(--dash-pink);
+  border-radius: 0.750rem;
+  background: #fff4f8;
+}
+
+.markdown blockquote p {
+  margin: 0;
+}
+
+.markdown blockquote p + p {
+  margin-top: 0.6em;
+}
+
+.markdown code {
+  font-family: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.85em;
+  background: #ffe9ef;
+  color: #ff466c;
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.438rem;
+}
+
+.markdown pre {
+  margin: 1.2em 0;
+  padding: 1.125rem 1.250rem;
+  border-radius: 1.000rem;
+  /* very light pink-toned code block background */
+  background: #fff5f9;
+  border: 2px solid #ffe0ea;
+  overflow-x: auto;
+}
+
+.markdown pre code {
+  display: block;
+  background: transparent;
+  padding: 0;
+  font-size: 0.938rem;
+  line-height: 1.3;
+  color: #4a3b42;
+}
+
+/* table wrapped in a rounded container so the corners clip cleanly.
+   The wrapper carries the full rounded 0.125rem outline (so the arcs have a
+   border too); the cells only draw the internal separators — first
+   column and header row skip their outer edge. */
+.markdown__table-wrap {
+  margin: 1.2em 0;
+  border-radius: 1.000rem;
+  overflow: hidden;
+  border: 2px solid #ffe0ea;
+}
+
+.markdown table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9em;
+  background: transparent;
+}
+
+.markdown th,
+.markdown td {
+  border-left: 2px solid #ffe0ea; /* column separators */
+  border-top: 2px solid #ffe0ea; /* row separators */
+  padding: 0.625rem 0.875rem;
+}
+
+/* outer edges come from the wrapper's rounded border */
+.markdown th:first-child,
+.markdown td:first-child {
+  border-left: none;
+}
+
+.markdown thead th {
+  border-top: none;
+}
+
+.markdown th {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  background: #ffe9ef; /* only the header has a background */
+  color: var(--body-ink);
+}
+
+.markdown hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 3px dashed var(--dash-pink);
+}
+
+.markdown img {
+  max-width: 100%;
+  border-radius: 1.000rem;
+}
+
+/* syntax highlighting (rehype-highlight) — bright theme on pink */
+.markdown .hljs-keyword { color: #e62e78; font-weight: 700; }
+.markdown .hljs-string { color: #00a85f; }
+.markdown .hljs-number { color: #ff6d2c; }
+.markdown .hljs-literal { color: #ff6d2c; }
+.markdown .hljs-title { color: #2f6bff; }
+.markdown .hljs-title.function_ { color: #2f6bff; }
+.markdown .hljs-title.class_ { color: #7c3aed; }
+.markdown .hljs-built_in { color: #ff9f1c; }
+.markdown .hljs-attr { color: #a855f7; }
+.markdown .hljs-attribute { color: #a855f7; }
+.markdown .hljs-variable { color: #475569; }
+.markdown .hljs-params { color: #475569; }
+.markdown .hljs-comment { color: #94a3b8; font-style: italic; }
+.markdown .hljs-meta { color: #ff6d2c; }
+.markdown .hljs-selector-class { color: #2f6bff; }
+.markdown .hljs-selector-id { color: #2f6bff; }
+.markdown .hljs-tag { color: #ff9f1c; }
+.markdown .hljs-name { color: #ff9f1c; }
+.markdown .hljs-doctag { color: #e62e78; }
+
+/* ============ Posts page (figma Page 2) ============ */
+.posts {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.125rem;
+  margin-top: 0.625rem; /* title bottom (179) → list top (189), per figma */
+  /* room for the 0.312rem ring (top) and ring + 0.938rem hard shadow
+     (bottom) so the first card's outline isn't clipped by the scroll
+     container */
+  padding: 0.625rem 0 1.562rem;
+}
+
+.post-card {
+  position: relative;
+  flex-shrink: 0;
+  /* slightly narrower than the list so the ring and hard shadow stay
+     inside the scroll container instead of being clipped */
+  width: calc(100% - 2.500rem);
+  margin: 0 auto;
+  height: 12.562rem;
+  border-radius: 4.719rem;
+  background: var(--white);
+  /* a bit more breathing room above the title so the content sits lower
+     in the fixed-height card instead of floating up */
+  padding: 2.000rem 4.688rem 1.250rem;
+  text-decoration: none;
+  /* figma: 5px #ffb5d6 stroke OUTSIDE + drop shadow (10,10), blur 0,
+     40% #ffb0d4 — offset starts past the ring: 0.312rem + 0.625rem */
+  box-shadow:
+    0 0 0 0.312rem #ffb5d6,
+    0.938rem 0.938rem 0 0 rgba(255, 176, 212, 0.4);
+  transition: transform 0.25s ease;
+}
+
+/* on hover the card scales up slightly and only the inner dashed outline
+   switches to the highlight color; the outer ring stays #ffb5d6 */
+.post-card:hover {
+  transform: scale(1.01);
+}
+
+.post-card:hover .dashed-border rect {
+  stroke: var(--highlight);
+  transition: stroke 0.15s ease;
+}
+
+/* title and date on one row, date right-aligned, vertically centered */
+.post-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.375rem;
+}
+
+.post-card__title {
+  margin: 0;
+  font-family: 'Rounded Mplus 1c', sans-serif;
+  font-weight: 800;
+  font-size: 2.250rem;
+  color: #89caf6;
+  line-height: 1.3;
+}
+
+.post-card__date {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  color: #c9abb5;
+  white-space: nowrap;
+}
+
+.post-card__text {
+  margin: 0;
+  font-size: 1.250rem;
+  line-height: 1.3;
+  color: var(--body-ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============ Pagination (figma page number bar) ============ */
+.page-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1.250rem;
+  /* reduced top margin so the list container grows enough for three
+     full-size cards (gap 50px + ring padding 10/25) to fit */
+  margin-top: 0.938rem;
+  margin-bottom: 1.625rem; /* with .main's 2.500rem bottom padding → buttons sit at y 929 */
+}
+
+.posts__empty {
+  margin: 2.500rem auto;
+  font-size: 1.375rem;
+  color: var(--body-ink);
+}
+
+.page-btn {
+  position: relative;
+  width: 4.188rem;
+  height: 4.188rem;
+  border-radius: 7.812rem; /* 67x67 → circle */
+  border: none;
+  /* only the current page button is filled and shadowed */
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.page-btn--current {
+  background: var(--white);
+  /* figma: drop shadow (3,3), blur 0, 40% #ffb0d4 */
+  box-shadow: 0.187rem 0.187rem 0 0 rgba(255, 176, 212, 0.4);
+}
+
+.page-btn__label {
+  position: relative;
+  display: block;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  font-size: 2.000rem;
+  line-height: 4.188rem;
+  color: var(--white);
+}
+
+.page-btn--current .page-btn__label {
+  color: var(--ink-pink);
+}
+
+/* ============ Context menu ============ */
+/* Context menu from blog.fig, exact frame: 17.562rem wide, title text at
+   (35,9), the three rectangles at (35,41), items list at (21,58). The
+   height adapts to the item count (set inline). */
+.context-menu {
+  position: fixed;
+  z-index: 100;
+  width: 17.562rem;
+  background: var(--menu-bg);
+  border-radius: 1.250rem;
+  /* blog.fig: 5px white stroke OUTSIDE + drop shadow (5,5), blur 0,
+     50% #ffb0d4. The shadow projects from the stroked shape, so the
+     offset starts past the 5px ring: 5px stroke + 5px offset. */
+  box-shadow:
+    0 0 0 0.312rem var(--white),
+    0.625rem 0.625rem 0 0 rgba(255, 176, 212, 0.5);
+}
+
+.context-menu__title-text {
+  position: absolute;
+  top: 0.562rem;
+  left: 2.188rem;
+  z-index: 2; /* above the decorative rectangles */
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 900;
+  font-size: 1.750rem;
+  line-height: 2.562rem;
+  color: var(--white);
+  /* blog.fig: 4px #7abfef stroke OUTSIDE (2× for paint-order trick) */
+  -webkit-text-stroke: 8px #7abfef;
+  paint-order: stroke;
+}
+
+/* the three 35x35 rectangles from the "effect" frame, each rotated 45°,
+   behind the title text. Centers from the figma transform matrix:
+   (24.75, 24.75), (74.25, 24.75), (123.75, 24.75) within the menu →
+   left/top = center − 17.5. */
+.context-menu__dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.context-menu__dots span {
+  position: absolute;
+  z-index: 1;
+  width: 2.188rem;
+  height: 2.188rem;
+  border-radius: 0.312rem;
+  background: var(--menu-dot);
+  transform: rotate(45deg);
+}
+
+.context-menu__dots span:nth-child(1) {
+  left: 2.625rem;
+  top: 1.500rem;
+}
+
+.context-menu__dots span:nth-child(2) {
+  left: 5.750rem;
+  top: 1.500rem;
+}
+
+.context-menu__dots span:nth-child(3) {
+  left: 8.812rem;
+  top: 1.500rem;
+}
+
+.context-menu__items {
+  position: absolute;
+  top: 3.625rem;
+  left: 1.312rem;
+  width: 15.000rem;
+  z-index: 2; /* above the decorative rectangles */
+}
+
+.context-menu__item {
+  display: block;
+  width: 15.000rem;
+  height: 3.375rem;
+  padding: 0 1.188rem;
+  border: none;
+  border-radius: 0.625rem;
+  background: var(--white);
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 500;
+  font-size: 1.500rem;
+  text-align: left;
+  color: var(--menu-item);
+  cursor: pointer;
+  transition: color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.context-menu__item + .context-menu__item {
+  margin-top: 0.812rem; /* figma gap: 67 − 54 */
+}
+
+.context-menu__item:hover {
+  color: var(--menu-hover);
+  /* blog.fig: hover item has a 3px solid #ffa6b8 stroke (CENTER) */
+  box-shadow: 0 0 0 3px #ffa6b8;
+}
+
+
+/* ============ Scrollbar ============ */
+/* Chromium/Safari: fully custom scrollbar via webkit pseudo-elements.
+   NOTE: setting scrollbar-color/scrollbar-width disables these, so the
+   standard properties are Firefox-only below. */
+.markdown::-webkit-scrollbar {
+  width: 0.625rem;
+}
+
+.markdown::-webkit-scrollbar-thumb {
+  background: var(--dash-pink);
+  border-radius: 0.312rem;
+}
+
+.markdown::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: 0.312rem; /* same radius as the thumb */
+}
+
+/* Firefox: standard properties only (they would override the webkit
+   pseudo-elements in Chromium, hence the moz-document gate) */
+@-moz-document url-prefix() {
+  .markdown {
+    scrollbar-color: var(--dash-pink) var(--scroll-track);
+    scrollbar-width: thin;
+  }
+}
+
+/* ============ Shared-element card transition ============ */
+.card-transition {
+  position: fixed;
+  z-index: 200;
+  border-radius: 4.719rem;
+  background: var(--white);
+  /* same ring + hard shadow as the article card, so the final frame
+     matches the card exactly and removal is seamless */
+  box-shadow:
+    0 0 0 0.312rem #ffb5d6,
+    1.250rem 1.250rem 0 0 rgba(255, 176, 212, 0.4);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.card-transition__dash {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============ Focus ============ */
+a:focus-visible,
+button:focus-visible {
+  outline: 0.188rem solid var(--ink-blue);
+  outline-offset: 0.188rem;
+  border-radius: 0.500rem;
+}
+
+/* ============ Responsive ============ */
+/* stacked layout only for touch devices; narrow desktop windows keep
+   the 1080p layout and are handled by the JS ui-scale zoom */
+@media (max-width: 960px) and (pointer: coarse) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .bg--blue {
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .bg--pink {
+    clip-path: inset(0 0 0 50%);
+  }
+
+  .sidebar {
+    flex: none;
+    width: 100%;
+    padding-top: 2.500rem;
+    padding-bottom: 2.500rem;
+    overflow: visible;
+  }
+
+  .name-card {
+    width: min(24.000rem, calc(100% - 2.500rem));
+  }
+
+  .nav-grid {
+    width: min(24.125rem, calc(100% - 2.500rem));
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(8.750rem, 12.062rem);
+    margin-top: 2.500rem;
+  }
+
+  .nav-item__label {
+    font-size: 1.625rem;
+  }
+
+  .main {
+    padding: 3.125rem 1.250rem 1.875rem;
+  }
+
+  .title-row {
+    gap: 0.750rem;
+    margin-bottom: 1.250rem;
+  }
+
+  .title-row__spacer {
+    width: 3.500rem;
+  }
+
+  .back-btn {
+    width: 3.500rem;
+    height: 3.500rem;
+    font-size: 1.375rem;
+  }
+
+  .page-title {
+    font-size: 2.125rem;
+    margin-bottom: 1.250rem;
+  }
+
+  .page-title__shadow {
+    -webkit-text-stroke: 7px rgba(248, 131, 174, 0.3);
+  }
+
+  .page-title__stroke {
+    -webkit-text-stroke: 7px var(--white);
+  }
+
+  .article-card {
+    height: auto;
+    min-height: 60vh;
+    border-radius: 2.500rem;
+    padding: 2.125rem 1.500rem 2.500rem;
+  }
+
+  .article-card__dash {
+    inset: 0.750rem;
+    border-radius: 1.875rem;
+  }
+
+  .markdown {
+    height: auto;
+    overflow: visible;
+  }
+
+  .posts {
+    gap: 1.500rem;
+    margin-top: 0.375rem;
+  }
+
+  .post-card {
+    height: auto;
+    min-height: 10.625rem;
+    border-radius: 2.500rem;
+    padding: 1.125rem 1.500rem;
+  }
+
+  .post-card__title {
+    font-size: 1.625rem;
+  }
+
+  .post-card__text {
+    font-size: 1.062rem;
+    -webkit-line-clamp: 4;
+  }
+
+  .page-bar {
+    gap: 0.750rem;
+    margin-top: 1.875rem;
+    margin-bottom: 0.750rem;
+  }
+
+  .page-btn {
+    width: 3.500rem;
+    height: 3.500rem;
+  }
+
+  .page-btn__label {
+    font-size: 1.625rem;
+    line-height: 3.500rem;
+  }
+
+  .markdown {
+    font-size: 1.125rem;
+  }
+
+  .markdown__title {
+    font-size: 1.875rem;
+    margin-bottom: 1.000rem;
+  }
+}
