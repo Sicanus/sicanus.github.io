@@ -49,9 +49,14 @@ export default function PostsPage() {
       const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
       const gap = parseFloat(cs.gap) || CARD_GAP
       const first = el.querySelector('.post-card')
-      const cardH = first ? first.getBoundingClientRect().height : CARD_HEIGHT
+      // offsetHeight is the layout height — unlike getBoundingClientRect()
+      // it ignores the hover transform scale(1.01), so a hovered card can
+      // never shrink the per-page count (which used to happen when the
+      // visual overflow briefly showed a scrollbar and re-triggered this
+      // measurement with the enlarged rect).
+      const cardH = first ? first.offsetHeight : CARD_HEIGHT
       const per = Math.max(1, Math.floor((el.clientHeight - padV + gap) / (cardH + gap)))
-      setPerPage(per)
+      setPerPage((prev) => (prev === per ? prev : per))
     }
     update()
     const ro = new ResizeObserver(update)
