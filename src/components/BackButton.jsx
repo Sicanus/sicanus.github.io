@@ -36,7 +36,7 @@ export default function BackButton({ slug }) {
     <Link
       to="/posts"
       className="back-btn"
-      aria-label="Back to posts"
+      aria-label="返回文章列表"
       onMouseEnter={() => spin('in')}
       onMouseLeave={() => spin('out')}
       onClick={handleClick}

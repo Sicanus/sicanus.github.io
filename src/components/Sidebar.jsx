@@ -101,9 +101,9 @@ function NavItem({ item, row, col }) {
  */
 export default function Sidebar() {
   const navItems = [
-    { to: '/', label: 'Home', icon: 'fa-solid fa-house', end: true },
-    { to: '/posts', label: 'Posts', icon: 'fa-solid fa-book-open', end: false },
-    { to: '/about', label: 'About', icon: 'fa-solid fa-heart', end: false },
+    { to: '/', label: '首頁', icon: 'fa-solid fa-house', end: true },
+    { to: '/posts', label: '文章', icon: 'fa-solid fa-book-open', end: false },
+    { to: '/about', label: '關於我', icon: 'fa-solid fa-heart', end: false },
   ]
 
   // Grid cells as placed in the Figma (rows 1-2, 2-2, 3-1). The empty

@@ -15,7 +15,7 @@ npm run preview  # serve the production build
 
 ## How posts work
 
-**Just drop a markdown file into `src/posts/`** — that's it. Every file
+**Just drop a markdown file into `posts/`** (next to `src/`) — that's it. Every file
 must start with a frontmatter block:
 
 ```markdown
@@ -29,7 +29,7 @@ Your markdown content here...
 ```
 
 `npm run generate` (run automatically by `dev`/`build`) scans the folder,
-sorts posts by `date` (newest first) and writes `src/posts/generated.js`,
+sorts posts by `date` (newest first) and writes `src/posts.generated.js`,
 which the app imports. The newest visible post is the featured post on the
 home page.
 
@@ -40,13 +40,13 @@ lists, strikethrough) and `rehype-highlight` (code syntax highlighting).
 
 `.github/workflows/deploy.yml` builds and deploys to GitHub Pages on every
 push to `main`. The build regenerates the post registry, so a new file in
-`src/posts/` is picked up automatically. The app uses a hash router, so
+`posts/` is picked up automatically. The app uses a hash router, so
 any URL (`/#/post/...`) works on refresh or direct access.
 
 ## Structure
 
-- `src/posts/` — the markdown content folder (the only thing you edit)
-- `scripts/generate-posts.js` — scans `src/posts/`, generates the registry
+- `posts/` — the markdown content folder (the only thing you edit)
+- `scripts/generate-posts.js` — scans `posts/`, generates the registry
 - `src/components/` — Sidebar, MarkdownView, ContextMenu, PageTitle, ...
 - `src/pages/` — Home, Post, Posts list
 - `src/assets/bg_blue.svg`, `bg_pink.svg` — the background assets from the
