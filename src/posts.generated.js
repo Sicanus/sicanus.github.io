@@ -10,10 +10,10 @@ import markdown_guide from '../posts/markdown-guide.md?raw'
 import about from '../posts/about.md?raw'
 
 export const posts = [
-  { slug: "welcome", title: "Welcome to My Blog", date: "2026-08-09", hidden: false, content: strip(welcome) },
+  { slug: "welcome", title: "ほーむ", date: "2026-08-09", hidden: false, content: strip(welcome) },
   { slug: "vite-react", title: "Building with Vite & React", date: "2026-08-09", hidden: false, content: strip(vite_react) },
   { slug: "markdown-guide", title: "Markdown Guide", date: "2026-08-09", hidden: false, content: strip(markdown_guide) },
-  { slug: "about", title: "About Me", date: "2026-08-09", hidden: true, content: strip(about) },
+  { slug: "about", title: "プロファイル", date: "2000-01-01", hidden: true, content: strip(about) },
 ]
 
 export const getPost = (slug) => posts.find((p) => p.slug === slug)
