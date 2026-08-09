@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import DashedBorder from './DashedBorder'
 import { beginCardTransition } from '../transition'
+import { SITE_NAME } from '../site'
 
 /**
  * One nav button: Font Awesome icon, label and the dashed outline.
@@ -131,7 +132,7 @@ export default function Sidebar() {
           stroke="#ffbad3"
           dash="0.625rem 0.625rem"
         />
-        <span className="name-card__text">Blog Name</span>
+        <span className="name-card__text">{SITE_NAME}</span>
       </div>
 
       <nav className="nav-grid" aria-label="Main navigation">

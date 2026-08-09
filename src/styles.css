@@ -82,9 +82,15 @@ body {
 
 .name-card {
   position: relative;
-  width: 24.000rem;
+  /* grows with the blog name when it exceeds the 384px design width,
+     capped at the sidebar width */
+  width: max-content;
+  min-width: 28.000rem;
+  max-width: 100%;
   height: 7.312rem;
   margin: 0 auto;
+  /* breathing room between the text and the dashed outline */
+  padding: 0 1rem;
   border-radius: 4.719rem;
   background: var(--white);
   display: flex;
