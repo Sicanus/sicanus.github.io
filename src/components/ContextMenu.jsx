@@ -92,7 +92,7 @@ export default function ContextMenu({ x, y, post, selectedText = '', onClose }) 
     ...(hasSelection
       ? [
           {
-            label: '複製',
+            label: 'コピー',
             onClick: () => {
               copy(selectedText)
               requestClose()
@@ -101,21 +101,21 @@ export default function ContextMenu({ x, y, post, selectedText = '', onClose }) 
         ]
       : []),
     {
-      label: '複製全文',
+      label: 'すべてコピー',
       onClick: () => {
         copy(fullText)
         requestClose()
       },
     },
     {
-      label: '複製連結',
+      label: 'リンクコピー',
       onClick: () => {
         copy(window.location.href)
         requestClose()
       },
     },
     {
-      label: '分享',
+      label: 'シェア',
       onClick: () => {
         navigator.share({ url: window.location.href }).catch(() => copy(window.location.href))
         requestClose()
@@ -140,7 +140,7 @@ export default function ContextMenu({ x, y, post, selectedText = '', onClose }) 
       onContextMenu={(e) => e.preventDefault()}
     >
       {/* title text at (35,9); the three rotated rectangles behind it */}
-      <span className="context-menu__title-text">選單</span>
+      <span className="context-menu__title-text">Menu</span>
       <span className="context-menu__dots" aria-hidden="true">
         <span />
         <span />

@@ -118,7 +118,7 @@ export default function PostsPage() {
 
   return (
     <>
-      <PageTitle>文章</PageTitle>
+      <PageTitle>記事</PageTitle>
 
       <div className="posts" ref={listRef}>
         {shown.length ? (
@@ -151,7 +151,7 @@ export default function PostsPage() {
             </Link>
           ))
         ) : (
-          <p className="posts__empty">尚無文章，請稍後再來！</p>
+          <p className="posts__empty">空っぽなのだ……</p>
         )}
       </div>
 
