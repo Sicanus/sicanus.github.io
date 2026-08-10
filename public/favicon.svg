@@ -1,9 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect x="4" y="4" width="56" height="56" rx="20" fill="#ffa2b5"/>
-  <rect x="10" y="10" width="44" height="44" rx="15" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="6 6"/>
-  <!-- plum blossom, the site's signature glyph — mirrors the FLOWER_PATH
-       in src/flower.js (scaled 0.14 and centered in the 64 viewBox) -->
-  <g transform="translate(10.1 10.65) scale(0.14)">
-    <path fill="#ffffff" d="M308.07,110.81c-10.96-33.75-42.32-55.15-76-55.04C221.77,23.71,191.73,0.5,156.24,0.5c-35.48,0-65.53,23.21-75.83,55.27c-33.67-0.12-65.03,21.29-76,55.04c-10.96,33.75,1.82,69.5,29.13,89.2c-10.52,31.99,0.15,68.43,28.86,89.29c28.71,20.86,66.66,19.74,93.83-0.15c27.17,19.89,65.13,21,93.83,0.15c28.71-20.86,39.37-57.3,28.86-89.29C306.24,180.31,319.03,144.55,308.07,110.81z"/>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 28.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 333.9 325.9" style="enable-background:new 0 0 333.9 325.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFA2B5;}
+	.st1{fill:none;stroke:#FFFFFF;stroke-width:15;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-width:15;stroke-miterlimit:10;stroke-dasharray:29.4467,24.5389;}
+	.st3{fill:none;stroke:#FFFFFF;stroke-width:15;stroke-miterlimit:10;stroke-dasharray:29.4461,24.5384;}
+	.st4{fill:none;stroke:#FFFFFF;stroke-width:15;stroke-miterlimit:10;stroke-dasharray:29.4468,24.539;}
+	.st5{fill:none;stroke:#FFFFFF;stroke-width:15;stroke-miterlimit:10;stroke-dasharray:29.4463,24.5386;}
+	.st6{fill:none;stroke:#FFFFFF;stroke-width:15;stroke-miterlimit:10;stroke-dasharray:29.4465,24.5387;}
+	.st7{fill:#FFFFFF;}
+	.st8{font-family:'ZenMaruGothic-Bold';}
+	.st9{font-size:170px;}
+</style>
+<g id="图层_2">
+	<path class="st0" d="M318.78,121.26c-10.96-33.75-42.32-55.15-76-55.04c-10.3-32.06-40.34-55.27-75.83-55.27
+		c-35.48,0-65.53,23.21-75.83,55.27c-33.67-0.12-65.03,21.29-76,55.04c-10.96,33.75,1.82,69.5,29.13,89.2
+		c-10.52,31.99,0.15,68.43,28.86,89.29c28.71,20.86,66.66,19.74,93.83-0.15c27.17,19.89,65.13,21,93.83,0.15
+		c28.71-20.86,39.37-57.3,28.86-89.29C316.95,190.76,329.74,155.01,318.78,121.26z"/>
+</g>
+<g id="图层_3">
+	<g>
+		<g>
+			<path class="st1" d="M243.24,86.3c-4.83-1.13-9.82-1.71-14.87-1.7c-1.54-4.81-3.64-9.38-6.21-13.62"/>
+			<path class="st2" d="M205.82,52.86c-10.81-8.18-24.27-13.03-38.87-13.03c-19.01,0-36.1,8.23-47.91,21.32"/>
+			<path class="st1" d="M111.74,70.98c-2.57,4.24-4.66,8.81-6.21,13.62c-5.05-0.02-10.04,0.56-14.87,1.7"/>
+			<path class="st3" d="M68.38,96.24c-11.12,7.75-19.89,19.06-24.4,32.94c-5.88,18.08-3.33,36.88,5.47,52.15"/>
+			<path class="st1" d="M56.54,191.32c3.24,3.75,6.94,7.16,11.03,10.11c-1.58,4.8-2.57,9.72-2.98,14.67"/>
+			<path class="st4" d="M67.16,240.36c3.94,12.97,11.98,24.81,23.79,33.39c15.38,11.18,34.04,14.56,51.29,10.91"/>
+			<path class="st1" d="M153.92,281c4.57-1.92,8.95-4.39,13.03-7.37c4.08,2.98,8.45,5.45,13.03,7.37"/>
+			<path class="st5" d="M203.85,286.06c13.55,0.26,27.29-3.73,39.11-12.31c15.38-11.18,24.37-27.88,26.23-45.4"/>
+			<path class="st1" d="M269.31,216.1c-0.42-4.94-1.41-9.87-2.98-14.67c4.1-2.96,7.79-6.36,11.03-10.11"/>
+			<path class="st6" d="M289.55,170.18c4.44-12.81,4.89-27.11,0.38-40.99c-5.88-18.08-18.98-31.79-35.08-38.97"/>
+		</g>
+	</g>
+</g>
+<g id="图层_4">
+	<text transform="matrix(1 0 0 1 113.9125 230.8363)" class="st7 st8 st9">S</text>
+</g>
 </svg>
