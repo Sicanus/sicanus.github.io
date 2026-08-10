@@ -385,8 +385,9 @@ button {
 
 /* ============ Profile (about) page ============ */
 /* The about page shows only the passport profile card (references
-   profile.svg), centered in the main panel — no article card chrome on
-   either viewport. A mobile-specific card will replace it later. */
+   profile.svg, with the portrait profile_mobile.svg swapped in at the
+   mobile breakpoint via a <picture> source), centered in the main panel —
+   no article card chrome on either viewport. */
 .profile-page {
   flex: 1;
   min-height: 0;
@@ -395,10 +396,18 @@ button {
   justify-content: center;
 }
 
+/* keep the img a direct flex child (and the <source> out of layout) so
+   the sizing rules below resolve against the panel, not a wrapper */
+.profile-page picture {
+  display: contents;
+}
+
 .profile-page img {
-  /* the passport art is drawn at 892 units wide; cap the rendered width
-     at 1200px (75rem at the 1080p design scale, so it follows the rem
-     scaling below 1080p) so the card never blows up on large monitors */
+  /* the desktop passport art is drawn at 892 units wide; cap the rendered
+     width at 1200px (75rem at the 1080p design scale, so it follows the
+     rem scaling below 1080p) so the card never blows up on large
+     monitors. The mobile art (513×891 portrait) is bound by max-height:
+     it shrinks to fit the panel while width:auto keeps the aspect. */
   max-width: min(100%, 75rem);
   max-height: 100%;
   width: auto;

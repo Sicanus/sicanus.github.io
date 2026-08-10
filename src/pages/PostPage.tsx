@@ -9,6 +9,7 @@ import { getPost } from '../posts'
 import { useT } from '../i18n'
 import { consumeCardTransition, runCardTransition } from '../transition'
 import profileArt from '../assets/profile.svg'
+import profileMobileArt from '../assets/profile_mobile.svg'
 
 interface MenuState {
   x: number
@@ -90,19 +91,23 @@ export default function PostPage({ slug: propSlug }: { slug?: string }) {
     )
   }
 
-  // The about page is a bare profile card: the passport design from
-  // references/profile.svg fills the main panel, and a mobile-specific
-  // card will replace it later (the article card chrome is intentionally
-  // omitted on both viewports).
+  // The about page is a bare profile card: the landscape passport design
+  // from references/profile.svg fills the desktop panel, the portrait
+  // references/profile_mobile.svg takes over at the mobile breakpoint.
+  // The picture element only downloads the source matching the viewport.
+  // The article card chrome is intentionally omitted on both viewports.
   if (post.slug === 'about') {
     return (
       <div className="profile-page">
-        <img
-          src={profileArt}
-          alt=""
-          onLoad={() => setProfileReady(true)}
-          className={profileReady ? 'profile-page__img--ready' : undefined}
-        />
+        <picture>
+          <source srcSet={profileMobileArt} media="(max-width: 960px)" />
+          <img
+            src={profileArt}
+            alt=""
+            onLoad={() => setProfileReady(true)}
+            className={profileReady ? 'profile-page__img--ready' : undefined}
+          />
+        </picture>
       </div>
     )
   }
