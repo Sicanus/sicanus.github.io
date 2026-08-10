@@ -3,4 +3,5 @@
  * (ordered by frontmatter date, newest first). Add a file with a
  * `title`/`date` frontmatter, then run `npm run generate`.
  */
-export { posts, getPost, featuredPost } from './posts.generated.js'
+export { posts, getPost, featuredPost } from './posts.generated'
+export type { Post } from './posts.generated'

@@ -2,16 +2,24 @@
 // Run `npm run generate` after adding or changing a file in posts/.
 
 // strips the frontmatter block so it is never rendered as body text
-const strip = (md) => md.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
+const strip = (md: string) => md.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
 
 import welcome from '../posts/welcome.md?raw'
 import about from '../posts/about.md?raw'
 
-export const posts = [
+export interface Post {
+  slug: string
+  title: string
+  date: string
+  hidden: boolean
+  content: string
+}
+
+export const posts: Post[] = [
   { slug: "welcome", title: "ほーむ", date: "2026-08-09", hidden: false, content: strip(welcome) },
   { slug: "about", title: "プロファイル", date: "2000-01-01", hidden: true, content: strip(about) },
 ]
 
-export const getPost = (slug) => posts.find((p) => p.slug === slug)
+export const getPost = (slug: string): Post | undefined => posts.find((p) => p.slug === slug)
 
-export const featuredPost = posts.find((p) => !p.hidden)
+export const featuredPost: Post | undefined = posts.find((p) => !p.hidden)
