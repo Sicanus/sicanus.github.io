@@ -194,7 +194,7 @@ button {
   z-index: 1;
   margin-top: 0.500rem;
   font-family: 'Zen Maru Gothic', sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 2.000rem;
   color: var(--label-blue);
 }
@@ -265,7 +265,7 @@ button {
   position: relative;
   margin: 0 0 1.625rem;
   font-family: 'Zen Maru Gothic', sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 3.000rem;
   text-align: center;
   color: var(--ink-blue);
