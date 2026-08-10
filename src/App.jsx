@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
+import { prefersReducedMotion } from './motion'
 import HomePage from './pages/HomePage'
 import PostPage from './pages/PostPage'
 import PostsPage from './pages/PostsPage'
@@ -81,6 +82,7 @@ export default function App() {
   // Fade the new page's content in after a route change. Card morph
   // transitions manage their own fades, so they are skipped.
   useLayoutEffect(() => {
+    if (prefersReducedMotion()) return
     if (document.querySelector('.card-transition')) return
     const main = document.querySelector('.main')
     if (!main) return

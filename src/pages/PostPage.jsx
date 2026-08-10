@@ -45,7 +45,7 @@ export default function PostPage({ slug: propSlug }) {
   if (!post) {
     return (
       <>
-        <PageTitle>Post not found</PageTitle>
+        <PageTitle>みつからないのだ……</PageTitle>
         <div className="article-card">
           <DashedBorder
             left="0.750rem"
@@ -59,9 +59,11 @@ export default function PostPage({ slug: propSlug }) {
           />
           <div className="markdown">
             <p>
-              Sorry — no post with the slug <code>"{slug}"</code> exists. Head
-              back to the <Link to="/posts">posts page</Link> to find something
-              to read.
+              「<code>{slug}</code>」っていう記事はないみたい。
+            </p>
+            <p>
+              <Link to="/posts">記事一覧</Link>か<Link to="/">ホーム</Link>
+              から探してみてね。
             </p>
           </div>
         </div>

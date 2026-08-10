@@ -1,3 +1,5 @@
+import { prefersReducedMotion } from './motion'
+
 /**
  * Shared-element transition between the posts list and an article.
  *
@@ -35,6 +37,13 @@ export const consumeCardTransition = () => {
  * card morph is the only visual focus; `done` runs after completion.
  */
 export function runCardTransition(from, to, targetEl, fadeEls, done) {
+  // reduced motion: navigate without the morph — the destination card
+  // is already mounted and visible behind the (skipped) overlay
+  if (prefersReducedMotion()) {
+    if (targetEl) targetEl.style.opacity = ''
+    done && done()
+    return
+  }
   const el = document.createElement('div')
   el.className = 'card-transition'
   el.style.left = `${from.x}px`

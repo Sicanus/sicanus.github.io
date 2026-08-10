@@ -2,6 +2,12 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import DashedBorder from './DashedBorder'
 import { beginCardTransition } from '../transition'
+import { prefersReducedMotion } from '../motion'
+
+// Touch devices have no hover — synthesized mouse events from long-press
+// would churn the ring animation, so it only exists where a real hover
+// does (same as the nav blossom).
+const CAN_HOVER = window.matchMedia('(hover: hover)').matches
 
 /**
  * Back-to-posts button styled like an unselected page number button:
@@ -17,12 +23,19 @@ export default function BackButton({ slug }) {
     const el = dashRef.current
     if (!el) return
     el.getAnimations().forEach((a) => a.cancel())
-    el.animate(
+    const [from, to] =
       dir === 'in'
-        ? [{ transform: 'rotate(0deg)' }, { transform: 'rotate(45deg)' }]
-        : [{ transform: 'rotate(45deg)' }, { transform: 'rotate(0deg)' }],
-      { duration: 400, easing: 'ease-out', fill: 'forwards' }
-    )
+        ? ['rotate(0deg)', 'rotate(45deg)']
+        : ['rotate(45deg)', 'rotate(0deg)']
+    if (prefersReducedMotion()) {
+      el.animate([{ transform: to }], { duration: 0, fill: 'forwards' })
+      return
+    }
+    el.animate([{ transform: from }, { transform: to }], {
+      duration: 400,
+      easing: 'ease-out',
+      fill: 'forwards',
+    })
   }
 
   const handleClick = () => {
@@ -37,8 +50,8 @@ export default function BackButton({ slug }) {
       to="/posts"
       className="back-btn"
       aria-label="記事リストに戻る"
-      onMouseEnter={() => spin('in')}
-      onMouseLeave={() => spin('out')}
+      onMouseEnter={CAN_HOVER ? () => spin('in') : undefined}
+      onMouseLeave={CAN_HOVER ? () => spin('out') : undefined}
       onClick={handleClick}
     >
       {/* dash like the idle pagination buttons: 55x55 at (6,6), r 27.5 */}

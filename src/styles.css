@@ -36,6 +36,15 @@ body {
   background: var(--scroll-track);
 }
 
+/* Touch devices: suppress the blue tap-highlight rectangle that browsers
+   paint over links/buttons while pressed, and allow taps without the
+   double-tap zoom delay (they are not zoom targets). */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 /* ============ Layout ============ */
 .app {
   position: relative;
@@ -108,21 +117,26 @@ body {
   pointer-events: none;
 }
 
-/* Nav item hover effect: the whole button scales up, and the dashed
-   outline spins a full turn on enter (nav-dash--in) and another full
-   turn back on leave (nav-dash--out). */
+/* Nav item hover effect: the blossom spins 36° on enter and back on
+   leave, scaling up together (see Sidebar.jsx). */
 .nav-item {
   transition: transform 0.25s ease;
 }
 
-.nav-item:hover {
-  transform: scale(1.06);
-}
 
-.nav-dash {
+
+.nav-flower {
   position: absolute;
   inset: 0;
   transform-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.nav-flower__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .name-card__text {
@@ -143,29 +157,41 @@ body {
 
 .nav-item {
   position: relative;
-  border-radius: 7.812rem;
-  background: var(--white);
+  background: transparent;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 3.062rem;
-  /* blog.fig: drop shadow (5,5), blur 0, spread 1, 70% #c1dcf7 */
-  box-shadow: 0.312rem 0.312rem 0 0.062rem rgba(193, 220, 247, 0.7);
+  /* clip-path removes box-shadow, so the hard shadow uses drop-shadow,
+     which follows the flower outline */
+  filter: drop-shadow(0.312rem 0.312rem 0 rgba(193, 220, 247, 0.7));
 }
 
 /* Font Awesome icon, no box and no background */
 .nav-item__icon {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.750rem;
   line-height: 1;
   color: var(--label-blue);
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, transform 0.25s ease;
+}
+
+.nav-item:hover .nav-item__icon {
+  transform: scale(1.06);
+}
+
+.nav-item:hover .nav-item__label {
+  transform: scale(1.06);
 }
 
 .nav-item__label {
+  position: relative;
+  z-index: 1;
   margin-top: 0.500rem;
   font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 700;
@@ -180,10 +206,6 @@ body {
 
 .nav-item--active .nav-item__label {
   color: var(--highlight);
-}
-
-.nav-item--active .nav-dash .dashed-border rect {
-  stroke: var(--highlight);
 }
 
 /* ============ Right panel (pink) ============ */
@@ -624,9 +646,23 @@ body {
 }
 
 .page-btn--current {
-  background: var(--white);
-  /* figma: drop shadow (3,3), blur 0, 40% #ffb0d4 */
-  box-shadow: 0.187rem 0.187rem 0 0 rgba(255, 176, 212, 0.4);
+  /* the white fill now comes from the blossom svg, so the hard shadow
+     must follow the flower outline via drop-shadow */
+  background: transparent;
+  filter: drop-shadow(0.187rem 0.187rem 0 rgba(255, 176, 212, 0.4));
+}
+
+.page-btn__flower {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.page-btn__flower-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .page-btn__label {
@@ -746,6 +782,36 @@ body {
   box-shadow: 0 0 0 3px #ffa6b8;
 }
 
+
+/* ============ Sidebar bloom on load ============ */
+/* One orchestrated moment: the name card drops in and the nav blossoms
+   open one by one (top to bottom). Plays once per page load — the
+   sidebar persists across routes. Reduced motion skips it entirely. */
+@keyframes bloom {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(0.375rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .name-card,
+  .nav-item {
+    animation: bloom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+
+  .nav-item:nth-child(1) {
+    animation-delay: 0.10s;
+  }
+
+  .nav-item:nth-child(2) {
+    animation-delay: 0.18s;
+  }
+
+  .nav-item:nth-child(3) {
+    animation-delay: 0.26s;
+  }
+}
 
 /* ============ Scrollbar ============ */
 /* Chromium/Safari: fully custom scrollbar via webkit pseudo-elements.
@@ -875,7 +941,8 @@ button:focus-visible {
   }
 
   .nav-item {
-    box-shadow: 0.125rem 0.125rem 0 0.062rem rgba(193, 220, 247, 0.7);
+    /* follow the flower outline, not the rectangular box */
+    filter: drop-shadow(0.125rem 0.125rem 0 rgba(193, 220, 247, 0.7));
   }
 
   .main {
@@ -916,7 +983,9 @@ button:focus-visible {
   }
 
   /* all dashed outlines thinner on mobile (3px → 2px) */
-  .dashed-border rect {
+  .dashed-border rect,
+  .nav-flower path,
+  .page-btn__flower-svg path {
     stroke-width: 0.125rem !important;
   }
 

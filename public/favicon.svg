@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect x="4" y="4" width="56" height="56" rx="20" fill="#ffa2b5"/>
   <rect x="10" y="10" width="44" height="44" rx="15" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="6 6"/>
-  <text x="32" y="44" font-family="Arial Rounded MT Bold, sans-serif" font-size="34" font-weight="800" fill="#ffffff" text-anchor="middle">B</text>
+  <!-- plum blossom, the site's signature glyph — mirrors the FLOWER_PATH
+       in src/flower.js (scaled 0.14 and centered in the 64 viewBox) -->
+  <g transform="translate(10.1 10.65) scale(0.14)">
+    <path fill="#ffffff" d="M308.07,110.81c-10.96-33.75-42.32-55.15-76-55.04C221.77,23.71,191.73,0.5,156.24,0.5c-35.48,0-65.53,23.21-75.83,55.27c-33.67-0.12-65.03,21.29-76,55.04c-10.96,33.75,1.82,69.5,29.13,89.2c-10.52,31.99,0.15,68.43,28.86,89.29c28.71,20.86,66.66,19.74,93.83-0.15c27.17,19.89,65.13,21,93.83,0.15c28.71-20.86,39.37-57.3,28.86-89.29C306.24,180.31,319.03,144.55,308.07,110.81z"/>
+  </g>
 </svg>

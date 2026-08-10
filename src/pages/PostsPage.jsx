@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import DashedBorder from '../components/DashedBorder'
 import PageTitle from '../components/PageTitle'
 import { posts } from '../posts'
+import { prefersReducedMotion } from '../motion'
 import { beginCardTransition, consumeCardTransition, runCardTransition } from '../transition'
+import { FLOWER_PATH } from '../flower'
 
 const CARD_HEIGHT = 201
 const CARD_GAP = 50
@@ -103,6 +105,7 @@ export default function PostsPage() {
   const goTo = (n) => {
     if (n === safePage) return
     setPage(n)
+    if (prefersReducedMotion()) return
     const el = listRef.current
     if (el) {
       el.getAnimations().forEach((a) => a.cancel())
@@ -166,17 +169,42 @@ export default function PostsPage() {
               onClick={() => goTo(n)}
               aria-current={current ? 'page' : undefined}
             >
-              {/* dash layer in figma: 55x55 at (6,6), current page 58x58 at (4,4) */}
-              <DashedBorder
-                left={current ? "0.250rem" : "0.375rem"}
-                top={current ? "0.250rem" : "0.375rem"}
-                right={current ? "0.312rem" : "0.375rem"}
-                bottom={current ? "0.312rem" : "0.375rem"}
-                radius="1.719rem"
-                strokeWidth="0.187rem"
-                stroke={current ? '#ffb5d6' : '#ffffff'}
-                dash="0.625rem 0.625rem"
-              />
+              {current ? (
+                /* the current page is marked by a filled plum blossom —
+                   the same "the flower shows where you are" language as
+                   the nav's active state */
+                <span className="page-btn__flower" aria-hidden="true">
+                  <svg className="page-btn__flower-svg" viewBox="0 0 312.48 305">
+                    <path d={FLOWER_PATH} fill="#ffffff" />
+                  </svg>
+                  <svg
+                    className="page-btn__flower-svg"
+                    style={{ position: 'relative', zIndex: 1 }}
+                    viewBox="-17.4 -16.9 347.2 338.9"
+                  >
+                    <path
+                      d={FLOWER_PATH}
+                      fill="none"
+                      stroke="#ffb5d6"
+                      strokeWidth="0.187rem"
+                      strokeDasharray="0.625rem 0.625rem"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  </svg>
+                </span>
+              ) : (
+                /* dash layer in figma: 55x55 at (6,6) */
+                <DashedBorder
+                  left="0.375rem"
+                  top="0.375rem"
+                  right="0.375rem"
+                  bottom="0.375rem"
+                  radius="1.719rem"
+                  strokeWidth="0.187rem"
+                  stroke="#ffffff"
+                  dash="0.625rem 0.625rem"
+                />
+              )}
               <span className="page-btn__label">{n}</span>
             </button>
           )

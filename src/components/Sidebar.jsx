@@ -1,34 +1,77 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import DashedBorder from './DashedBorder'
 import { beginCardTransition } from '../transition'
 import { SITE_NAME } from '../site'
+import { prefersReducedMotion } from '../motion'
+import { FLOWER_PATH } from '../flower'
+
+// Touch devices have no hover — attaching the mouse handlers there only
+// feeds synthesized events from long-press (which also opens the native
+// link preview), churning the blossom animation. Hover spins exist only
+// where a real hover does; touch devices get a one-shot spin on tap
+// instead (rotating back when tapping anywhere else).
+const CAN_HOVER = window.matchMedia('(hover: hover)').matches
 
 /**
- * One nav button: Font Awesome icon, label and the dashed outline.
- * On mouse enter the dash spins one full turn clockwise; on leave it
- * spins one full turn back. The spin runs via the Web Animations API so
- * the element is never rebuilt (rebuilding between mousedown/mouseup
- * would swallow the click event).
+ * One nav button: Font Awesome icon, label and the plum blossom outline.
+ * On mouse enter the blossom spins 36° and scales up; on leave it spins
+ * back. The spin runs via the Web Animations API so the element is never
+ * rebuilt (rebuilding between mousedown/mouseup would swallow the click).
  */
 function NavItem({ item, row, col }) {
-  const dashRef = useRef(null)
+  const flowerRef = useRef(null)
+  const linkRef = useRef(null)
+  const [touched, setTouched] = useState(false)
+  const prevTouched = useRef(null)
   const navigate = useNavigate()
   const location = useLocation()
   // reading an article keeps the Posts button highlighted
   const isPostSlug = location.pathname.startsWith('/post/')
 
   const spin = (dir) => {
-    const el = dashRef.current
+    const el = flowerRef.current
     if (!el) return
     el.getAnimations().forEach((a) => a.cancel())
-    el.animate(
+    // rotate to 36° and hold it (half a petal-step, so the blossom rests
+    // tilted instead of snapping back to the identical orientation);
+    // scale up together — smooth, no late pop, no wiggle. Mouse leave
+    // rotates and scales back.
+    const [from, to] =
       dir === 'in'
-        ? [{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }]
-        : [{ transform: 'rotate(360deg)' }, { transform: 'rotate(0deg)' }],
-      { duration: 400, easing: 'ease-out', fill: 'forwards' }
-    )
+        ? ['rotate(0deg) scale(1)', 'rotate(36deg) scale(1.06)']
+        : ['rotate(36deg) scale(1.06)', 'rotate(0deg) scale(1)']
+    if (prefersReducedMotion()) {
+      el.animate([{ transform: to }], { duration: 0, fill: 'forwards' })
+      return
+    }
+    el.animate([{ transform: from }, { transform: to }], {
+      duration: 400,
+      easing: 'ease-out',
+      fill: 'forwards',
+    })
   }
+
+  // Touch devices: a tap on the button plays the spin once and holds it;
+  // touching anything else — another nav button included — spins it back.
+  // (prevTouched guards the initial mount so no spurious spin-back plays.)
+  useEffect(() => {
+    if (CAN_HOVER) return
+    const outside = (e) => {
+      if (!linkRef.current?.contains(e.target)) setTouched(false)
+    }
+    document.addEventListener('touchstart', outside, { passive: true })
+    return () => document.removeEventListener('touchstart', outside)
+  }, [])
+
+  useEffect(() => {
+    if (prevTouched.current === null) {
+      prevTouched.current = touched
+      return
+    }
+    if (prevTouched.current !== touched) spin(touched ? 'in' : 'out')
+    prevTouched.current = touched
+  }, [touched])
 
   const handleClick = (e) => {
     // clicking the button of the page we're already on: do nothing
@@ -44,6 +87,10 @@ function NavItem({ item, row, col }) {
     }
     // any other page switch: fade the main content out, then navigate
     e.preventDefault()
+    if (prefersReducedMotion()) {
+      navigate(item.to)
+      return
+    }
     const main = document.querySelector('.main')
     if (main) {
       main
@@ -60,33 +107,48 @@ function NavItem({ item, row, col }) {
 
   return (
     <NavLink
+      ref={linkRef}
       to={item.to}
       end={item.end}
       className={({ isActive }) => {
         const active = isActive || (item.to === '/posts' && isPostSlug)
         return `nav-item${active ? ' nav-item--active' : ''}`
       }}
-      style={{ gridRow: row, gridColumn: col }}
-      onMouseEnter={() => spin('in')}
-      onMouseLeave={() => spin('out')}
-      onClick={handleClick}
+      style={{
+        gridRow: row,
+        gridColumn: col,
+      }}
+      onMouseEnter={CAN_HOVER ? () => spin('in') : undefined}
+      onMouseLeave={CAN_HOVER ? () => spin('out') : undefined}
+      onClick={(e) => {
+        if (!CAN_HOVER) setTouched(true)
+        handleClick(e)
+      }}
     >
       {({ isActive }) => (
         <>
-          {/* dash layer in figma: 169x169 at (11,11) inside 193x193;
-              radius = 96.5 (card circle) − 12px offset = 84.5;
-              turns highlight yellow when active (CSS --highlight) */}
-          <span className="nav-dash" ref={dashRef}>
-            <DashedBorder
-              left="0.687rem"
-              top="0.687rem"
-              right="0.812rem"
-              bottom="0.812rem"
-              radius="5.281rem"
-              strokeWidth="0.187rem"
-              stroke="#9ecfff"
-              dash="0.625rem 0.625rem"
-            />
+          {/* the whole flower (white fill + dashed outline) rotates; the
+              icon and label below stay horizontal */}
+          <span className="nav-flower" ref={flowerRef} aria-hidden="true">
+            {/* white flower fill — matches the clip shape exactly */}
+            <svg className="nav-flower__svg" viewBox="0 0 312.48 305">
+              <path d={FLOWER_PATH} fill="#ffffff" />
+            </svg>
+            {/* dashed outline — inset one ring from the flower edge */}
+            <svg
+              className="nav-flower__svg"
+              style={{ position: 'relative', zIndex: 1 }}
+              viewBox="-17.4 -16.9 347.2 338.9"
+            >
+              <path
+                d={FLOWER_PATH}
+                fill="none"
+                stroke={isActive ? '#ffd02e' : '#9ecfff'}
+                strokeWidth="0.187rem"
+                strokeDasharray="16 16"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
           </span>
           <span className="nav-item__icon" aria-hidden="true">
             <i className={item.icon} />
