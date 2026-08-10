@@ -982,10 +982,13 @@ button:focus-visible {
     justify-content: center;
   }
 
-  /* all dashed outlines thinner on mobile (3px → 2px) */
+  /* all dashed outlines thinner on mobile (3px → 2px) — the card-morph
+     overlay included, or its dash would jump 2px→3px→2px across the
+     transition */
   .dashed-border rect,
   .nav-flower path,
-  .page-btn__flower-svg path {
+  .page-btn__flower-svg path,
+  .card-transition__dash rect {
     stroke-width: 0.125rem !important;
   }
 
