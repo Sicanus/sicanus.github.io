@@ -1,0 +1,26 @@
+import type { Key } from './ja'
+
+export const en: Record<Key, string> = {
+  'site.name': "Sicanus's Blog",
+  'nav.aria': 'Main navigation',
+  'nav.home': 'Home',
+  'nav.posts': 'Posts',
+  'nav.about': 'About',
+  'menu.title': 'Menu',
+  'menu.copy': 'Copy',
+  'menu.copyAll': 'Copy all',
+  'menu.copyLink': 'Copy link',
+  'menu.share': 'Share',
+  'back.aria': 'Back to the posts',
+  'posts.title': 'Posts',
+  'posts.empty': 'Nothing here yet……',
+  'posts.paginationAria': 'Pagination',
+  'notFound.title': 'Not found……',
+  'notFound.quotePre': 'No article called “',
+  'notFound.quotePost': '” was found.',
+  'notFound.postsLink': 'posts list',
+  'notFound.homeLink': 'home',
+  'notFound.tryPre': 'Try the ',
+  'notFound.tryMid': ' or ',
+  'notFound.tryPost': '.',
+}

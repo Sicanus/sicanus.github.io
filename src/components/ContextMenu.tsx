@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Post } from '../posts'
+import { useT } from '../i18n'
 
 const copy = async (text: string) => {
   try {
@@ -27,6 +28,7 @@ interface ContextMenuProps {
 export default function ContextMenu({ x, y, post, selectedText = '', onClose }: ContextMenuProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [closing, setClosing] = useState(false)
+  const { t } = useT()
 
   // fade in on mount
   useEffect(() => {
@@ -102,7 +104,7 @@ export default function ContextMenu({ x, y, post, selectedText = '', onClose }: 
     ...(hasSelection
       ? [
           {
-            label: 'コピー',
+            label: t('menu.copy'),
             onClick: () => {
               copy(selectedText)
               requestClose()
@@ -111,21 +113,21 @@ export default function ContextMenu({ x, y, post, selectedText = '', onClose }: 
         ]
       : []),
     {
-      label: 'すべてコピー',
+      label: t('menu.copyAll'),
       onClick: () => {
         copy(fullText)
         requestClose()
       },
     },
     {
-      label: 'リンクコピー',
+      label: t('menu.copyLink'),
       onClick: () => {
         copy(window.location.href)
         requestClose()
       },
     },
     {
-      label: 'シェア',
+      label: t('menu.share'),
       onClick: () => {
         navigator.share({ url: window.location.href }).catch(() => copy(window.location.href))
         requestClose()
@@ -150,7 +152,7 @@ export default function ContextMenu({ x, y, post, selectedText = '', onClose }: 
       onContextMenu={(e) => e.preventDefault()}
     >
       {/* title text at (35,9); the three rotated rectangles behind it */}
-      <span className="context-menu__title-text">Menu</span>
+      <span className="context-menu__title-text">{t('menu.title')}</span>
       <span className="context-menu__dots" aria-hidden="true">
         <span />
         <span />

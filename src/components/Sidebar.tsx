@@ -3,7 +3,7 @@ import type { MouseEvent } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import DashedBorder from './DashedBorder'
 import { beginCardTransition } from '../transition'
-import { SITE_NAME } from '../site'
+import { useT } from '../i18n'
 import { prefersReducedMotion } from '../motion'
 import { FLOWER_PATH } from '../flower'
 
@@ -40,8 +40,10 @@ function NavItem({ item, row, col }: GridCell) {
   const prevTouched = useRef<boolean | null>(null)
   const navigate = useNavigate()
   const location = useLocation()
+  const { locale } = useT()
   // reading an article keeps the Posts button highlighted
-  const isPostSlug = location.pathname.startsWith('/post/')
+  // (path is locale-prefixed, e.g. /ja/post/welcome)
+  const isPostSlug = /^\/[^/]+\/post\//.test(location.pathname)
 
   const spin = (dir: 'in' | 'out') => {
     const el = flowerRef.current
@@ -95,7 +97,7 @@ function NavItem({ item, row, col }: GridCell) {
     // change)
     if (location.pathname === item.to) return
     // navigating from an article to the posts list plays the card morph
-    if (item.to === '/posts' && isPostSlug) {
+    if (item.to === `/${locale}/posts` && isPostSlug) {
       const card = document.querySelector('.article-card')
       const slug = location.pathname.split('/post/')[1]
       if (card && slug) beginCardTransition(card.getBoundingClientRect(), slug)
@@ -183,10 +185,11 @@ function NavItem({ item, row, col }: GridCell) {
  * name card on top. Shadows, dashes and strokes match blog.fig exactly.
  */
 export default function Sidebar() {
+  const { locale, t } = useT()
   const navItems: NavItemDef[] = [
-    { to: '/', label: 'ホーム', icon: 'fa-solid fa-house', end: true },
-    { to: '/posts', label: '記事', icon: 'fa-solid fa-book-open', end: false },
-    { to: '/about', label: 'プロフ', icon: 'fa-solid fa-heart', end: false },
+    { to: `/${locale}`, label: t('nav.home'), icon: 'fa-solid fa-house', end: true },
+    { to: `/${locale}/posts`, label: t('nav.posts'), icon: 'fa-solid fa-book-open', end: false },
+    { to: `/${locale}/about`, label: t('nav.about'), icon: 'fa-solid fa-heart', end: false },
   ]
 
   // Grid cells as placed in the Figma (rows 1-2, 2-2, 3-1). The empty
@@ -214,10 +217,10 @@ export default function Sidebar() {
           stroke="#ffbad3"
           dash="0.625rem 0.625rem"
         />
-        <span className="name-card__text">{SITE_NAME}</span>
+        <span className="name-card__text">{t('site.name')}</span>
       </div>
 
-      <nav className="nav-grid" aria-label="Main navigation">
+      <nav className="nav-grid" aria-label={t('nav.aria')}>
         {cells.map((cell) => (
           <NavItem
             key={cell.item.to}

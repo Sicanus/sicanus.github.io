@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Navigate, Outlet, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import { prefersReducedMotion } from './motion'
 import HomePage from './pages/HomePage'
 import PostPage from './pages/PostPage'
 import PostsPage from './pages/PostsPage'
+import { LocaleProvider } from './i18n'
+import { isLocale, localeFromPath } from './i18n/locales'
 
 /**
  * Below 1080p the root font size shrinks, scaling every rem-based UI
@@ -23,6 +25,17 @@ function useUiScale() {
     window.addEventListener('resize', apply)
     return () => window.removeEventListener('resize', apply)
   }, [])
+}
+
+/**
+ * The first path segment is the locale. An un-prefixed deep link (e.g.
+ * #/posts) would be consumed as the locale parameter — validate it and
+ * render the localized 404 instead of a page in a bogus locale.
+ */
+function LocaleGate() {
+  const { locale } = useParams()
+  if (!isLocale(locale)) return <PostPage slug="nonexistent" />
+  return <Outlet />
 }
 
 // On touch devices, an upward swipe hides the blue sidebar region; a
@@ -79,6 +92,7 @@ export default function App() {
   useUiScale()
   useHideSidebarOnScroll()
   const { pathname } = useLocation()
+  const locale = localeFromPath(pathname)
 
   // Fade the new page's content in after a route change. Card morph
   // transitions manage their own fades, so they are skipped.
@@ -95,21 +109,29 @@ export default function App() {
     })
   }, [pathname])
   return (
-    <div className="app">
-      {/* Both backgrounds render full-screen and are clipped to their
-          regions (left panel = blue, right panel = pink). */}
-      <div className="bg bg--blue" aria-hidden="true" />
-      <div className="bg bg--pink" aria-hidden="true" />
-      <Sidebar />
-      <main className="main">
-        <Routes>
-          <Route index element={<HomePage />} />
-          <Route path="post/:slug" element={<PostPage />} />
-          <Route path="posts" element={<PostsPage />} />
-          <Route path="about" element={<PostPage slug="about" />} />
-          <Route path="*" element={<PostPage slug="nonexistent" />} />
-        </Routes>
-      </main>
-    </div>
+    <LocaleProvider locale={locale}>
+      <div className="app">
+        {/* Both backgrounds render full-screen and are clipped to their
+            regions (left panel = blue, right panel = pink). */}
+        <div className="bg bg--blue" aria-hidden="true" />
+        <div className="bg bg--pink" aria-hidden="true" />
+        <Sidebar />
+        <main className="main">
+          <Routes>
+            {/* the bare entry picks the locale from the browser language;
+                un-prefixed deep links are not redirected (they fall into
+                the localized 404 below) */}
+            <Route path="/" element={<Navigate to={`/${locale}`} replace />} />
+            <Route path="/:locale" element={<LocaleGate />}>
+              <Route index element={<HomePage />} />
+              <Route path="post/:slug" element={<PostPage />} />
+              <Route path="posts" element={<PostsPage />} />
+              <Route path="about" element={<PostPage slug="about" />} />
+              <Route path="*" element={<PostPage slug="nonexistent" />} />
+            </Route>
+          </Routes>
+        </main>
+      </div>
+    </LocaleProvider>
   )
 }

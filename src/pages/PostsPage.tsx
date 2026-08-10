@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import DashedBorder from '../components/DashedBorder'
 import PageTitle from '../components/PageTitle'
 import { posts } from '../posts'
+import { useT } from '../i18n'
+import { formatDate } from '../i18n/dates'
 import { prefersReducedMotion } from '../motion'
 import { beginCardTransition, consumeCardTransition, runCardTransition } from '../transition'
 import { FLOWER_PATH } from '../flower'
@@ -35,6 +37,7 @@ const excerpt = (md: string) =>
 export default function PostsPage() {
   const visible = posts.filter((post) => !post.hidden)
   const listRef = useRef<HTMLDivElement>(null)
+  const { locale, t } = useT()
   const [perPage, setPerPage] = useState(3)
   const [page, setPage] = useState(1)
 
@@ -122,14 +125,14 @@ export default function PostsPage() {
 
   return (
     <>
-      <PageTitle>記事</PageTitle>
+      <PageTitle>{t('posts.title')}</PageTitle>
 
       <div className="posts" ref={listRef}>
         {shown.length ? (
           shown.map((post) => (
             <Link
               key={post.slug}
-              to={`/post/${post.slug}`}
+              to={`/${locale}/post/${post.slug}`}
               data-slug={post.slug}
               className="post-card"
               onClick={(e) => beginCardTransition(e.currentTarget.getBoundingClientRect(), post.slug)}
@@ -149,17 +152,19 @@ export default function PostsPage() {
               />
               <div className="post-card__header">
                 <h2 className="post-card__title">{post.title}</h2>
-                {post.date && <span className="post-card__date">{post.date}</span>}
+                {post.date && (
+                  <span className="post-card__date">{formatDate(post.date, locale)}</span>
+                )}
               </div>
               <p className="post-card__text">{excerpt(post.content)}</p>
             </Link>
           ))
         ) : (
-          <p className="posts__empty">空っぽなのだ……</p>
+          <p className="posts__empty">{t('posts.empty')}</p>
         )}
       </div>
 
-      <nav className="page-bar" aria-label="Pagination">
+      <nav className="page-bar" aria-label={t('posts.paginationAria')}>
         {Array.from({ length: pages }, (_, i) => i + 1).map((n) => {
           const current = n === safePage
           return (

@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import DashedBorder from './DashedBorder'
 import { beginCardTransition } from '../transition'
+import { useT } from '../i18n'
 import { prefersReducedMotion } from '../motion'
 
 // Touch devices have no hover — synthesized mouse events from long-press
@@ -18,6 +19,7 @@ const CAN_HOVER = window.matchMedia('(hover: hover)').matches
  */
 export default function BackButton({ slug }: { slug?: string }) {
   const dashRef = useRef<HTMLSpanElement>(null)
+  const { locale, t } = useT()
 
   const spin = (dir: 'in' | 'out') => {
     const el = dashRef.current
@@ -47,9 +49,9 @@ export default function BackButton({ slug }: { slug?: string }) {
 
   return (
     <Link
-      to="/posts"
+      to={`/${locale}/posts`}
       className="back-btn"
-      aria-label="記事リストに戻る"
+      aria-label={t('back.aria')}
       onMouseEnter={CAN_HOVER ? () => spin('in') : undefined}
       onMouseLeave={CAN_HOVER ? () => spin('out') : undefined}
       onClick={handleClick}

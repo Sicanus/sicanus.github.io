@@ -6,6 +6,7 @@ import DashedBorder from '../components/DashedBorder'
 import PageTitle from '../components/PageTitle'
 import BackButton from '../components/BackButton'
 import { getPost } from '../posts'
+import { useT } from '../i18n'
 import { consumeCardTransition, runCardTransition } from '../transition'
 
 interface MenuState {
@@ -20,6 +21,7 @@ export default function PostPage({ slug: propSlug }: { slug?: string }) {
   const [menu, setMenu] = useState<MenuState | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const post = getPost(slug)
+  const { locale, t } = useT()
 
   // Coming from the posts list: grow the floating card from the clicked
   // post card's rect onto this article card.
@@ -53,7 +55,7 @@ export default function PostPage({ slug: propSlug }: { slug?: string }) {
   if (!post) {
     return (
       <>
-        <PageTitle>みつからないのだ……</PageTitle>
+        <PageTitle>{t('notFound.title')}</PageTitle>
         <div className="article-card">
           <DashedBorder
             left="0.750rem"
@@ -67,11 +69,16 @@ export default function PostPage({ slug: propSlug }: { slug?: string }) {
           />
           <div className="markdown">
             <p>
-              「<code>{slug}</code>」っていう記事はないみたい。
+              {t('notFound.quotePre')}
+              <code>{slug}</code>
+              {t('notFound.quotePost')}
             </p>
             <p>
-              <Link to="/posts">記事一覧</Link>か<Link to="/">ホーム</Link>
-              から探してみてね。
+              {t('notFound.tryPre')}
+              <Link to={`/${locale}/posts`}>{t('notFound.postsLink')}</Link>
+              {t('notFound.tryMid')}
+              <Link to={`/${locale}`}>{t('notFound.homeLink')}</Link>
+              {t('notFound.tryPost')}
             </p>
           </div>
         </div>

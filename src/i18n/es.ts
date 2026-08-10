@@ -1,0 +1,26 @@
+import type { Key } from './ja'
+
+export const es: Record<Key, string> = {
+  'site.name': "Sicanus's Blog",
+  'nav.aria': 'Navegación principal',
+  'nav.home': 'Inicio',
+  'nav.posts': 'Artículos',
+  'nav.about': 'Sobre mí',
+  'menu.title': 'Menú',
+  'menu.copy': 'Copiar',
+  'menu.copyAll': 'Copiar todo',
+  'menu.copyLink': 'Copiar enlace',
+  'menu.share': 'Compartir',
+  'back.aria': 'Volver a los artículos',
+  'posts.title': 'Artículos',
+  'posts.empty': 'Nada por aquí todavía……',
+  'posts.paginationAria': 'Paginación',
+  'notFound.title': 'No encontrado……',
+  'notFound.quotePre': 'No existe un artículo llamado “',
+  'notFound.quotePost': '”.',
+  'notFound.postsLink': 'lista de artículos',
+  'notFound.homeLink': 'inicio',
+  'notFound.tryPre': 'Prueba la ',
+  'notFound.tryMid': ' o el ',
+  'notFound.tryPost': '.',
+}

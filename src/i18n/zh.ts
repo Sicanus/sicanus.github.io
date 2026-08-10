@@ -1,0 +1,26 @@
+import type { Key } from './ja'
+
+export const zh: Record<Key, string> = {
+  'site.name': 'Sicanus 的部落格',
+  'nav.aria': '主要導覽',
+  'nav.home': '首頁',
+  'nav.posts': '文章',
+  'nav.about': '關於我',
+  'menu.title': '選單',
+  'menu.copy': '複製',
+  'menu.copyAll': '全部複製',
+  'menu.copyLink': '複製連結',
+  'menu.share': '分享',
+  'back.aria': '回到文章列表',
+  'posts.title': '文章',
+  'posts.empty': '這裡空空如也……',
+  'posts.paginationAria': '分頁',
+  'notFound.title': '找不到呢……',
+  'notFound.quotePre': '「',
+  'notFound.quotePost': '」這篇文章好像不存在。',
+  'notFound.postsLink': '文章列表',
+  'notFound.homeLink': '首頁',
+  'notFound.tryPre': '從',
+  'notFound.tryMid': '或',
+  'notFound.tryPost': '找找看吧。',
+}
