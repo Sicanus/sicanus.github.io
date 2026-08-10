@@ -41,7 +41,8 @@
       "Bash(curl -s \"http://localhost:5173/src/components/PageTitle.jsx\")",
       "Bash(curl -s \"http://localhost:5173/src/pages/HomePage.jsx\")",
       "Bash(curl -s \"http://localhost:5173/src/App.jsx\")",
-      "Bash(pkill -f \"vite\")"
+      "Bash(pkill -f \"vite\")",
+      "Bash(npx tsc *)"
     ]
   }
 }
