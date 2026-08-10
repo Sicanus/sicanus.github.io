@@ -8,6 +8,7 @@ import BackButton from '../components/BackButton'
 import { getPost } from '../posts'
 import { useT } from '../i18n'
 import { consumeCardTransition, runCardTransition } from '../transition'
+import profileArt from '../assets/profile.svg'
 
 interface MenuState {
   x: number
@@ -19,6 +20,9 @@ export default function PostPage({ slug: propSlug }: { slug?: string }) {
   const { slug: paramSlug } = useParams()
   const slug = propSlug ?? paramSlug ?? ''
   const [menu, setMenu] = useState<MenuState | null>(null)
+  // the profile card fades in only after its SVG asset finished loading,
+  // so a slow asset never pops in after a blank gap
+  const [profileReady, setProfileReady] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const post = getPost(slug)
   const { locale, t } = useT()
@@ -83,6 +87,23 @@ export default function PostPage({ slug: propSlug }: { slug?: string }) {
           </div>
         </div>
       </>
+    )
+  }
+
+  // The about page is a bare profile card: the passport design from
+  // references/profile.svg fills the main panel, and a mobile-specific
+  // card will replace it later (the article card chrome is intentionally
+  // omitted on both viewports).
+  if (post.slug === 'about') {
+    return (
+      <div className="profile-page">
+        <img
+          src={profileArt}
+          alt=""
+          onLoad={() => setProfileReady(true)}
+          className={profileReady ? 'profile-page__img--ready' : undefined}
+        />
+      </div>
     )
   }
 

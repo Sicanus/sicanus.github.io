@@ -70,18 +70,82 @@ button {
 }
 
 .bg--blue {
-  background: url('./assets/bg_blue.svg') no-repeat center;
-  background-size: cover;
+  /* flat panel until the artwork is applied (see the .bg-ready rules) */
   background-color: var(--blue-panel);
   /* wave seam at the same 28.4% as the sidebar */
   clip-path: polygon(0% 0%, calc(28.4% - (100dvh / 1440) * 24.50) 0%, calc(28.4% - (100dvh / 1440) * 11.57) 3.7197%, calc(28.4% + (100dvh / 1440) * 0.54) 7.3949%, calc(28.4% + (100dvh / 1440) * 11.01) 10.9814%, calc(28.4% + (100dvh / 1440) * 19.05) 14.4346%, calc(28.4% + (100dvh / 1440) * 23.81) 17.7103%, calc(28.4% + (100dvh / 1440) * 24.50) 20.7639%, calc(28.4% + (100dvh / 1440) * 20.68) 23.5730%, calc(28.4% + (100dvh / 1440) * 13.49) 26.2026%, calc(28.4% + (100dvh / 1440) * 4.46) 28.7398%, calc(28.4% - (100dvh / 1440) * 4.91) 31.2716%, calc(28.4% - (100dvh / 1440) * 13.07) 33.8849%, calc(28.4% - (100dvh / 1440) * 18.50) 36.6667%, calc(28.4% - (100dvh / 1440) * 20.10) 39.6794%, calc(28.4% - (100dvh / 1440) * 18.39) 42.8872%, calc(28.4% - (100dvh / 1440) * 14.34) 46.2294%, calc(28.4% - (100dvh / 1440) * 8.87) 49.6457%, calc(28.4% - (100dvh / 1440) * 2.94) 53.0755%, calc(28.4% + (100dvh / 1440) * 2.50) 56.4583%, calc(28.4% + (100dvh / 1440) * 6.67) 59.7519%, calc(28.4% + (100dvh / 1440) * 9.45) 62.9869%, calc(28.4% + (100dvh / 1440) * 10.89) 66.2122%, calc(28.4% + (100dvh / 1440) * 11.01) 69.4768%, calc(28.4% + (100dvh / 1440) * 9.87) 72.8296%, calc(28.4% + (100dvh / 1440) * 7.50) 76.3194%, calc(28.4% + (100dvh / 1440) * 3.97) 79.9820%, calc(28.4% - (100dvh / 1440) * 0.54) 83.7996%, calc(28.4% - (100dvh / 1440) * 5.84) 87.7412%, calc(28.4% - (100dvh / 1440) * 11.73) 91.7758%, calc(28.4% - (100dvh / 1440) * 18.02) 95.8724%, calc(28.4% - (100dvh / 1440) * 24.50) 100%, 0% 100%);
 }
 
-.bg--pink {
-  background: url('./assets/bg_pink.svg') no-repeat center;
+/* The artwork's background-image is only applied once `.bg-ready` exists
+   (App.tsx adds it after both SVGs are decoded), so the SVGs can never
+   paint before the sweep starts — their first paint IS the sweep. Until
+   then only the flat panel colors above show. */
+.bg-wrap.bg-ready .bg--blue {
+  background-image: url('./assets/bg_blue.svg');
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
+}
+
+.bg--pink {
+  /* flat panel until the artwork is applied (see the .bg-ready rules) */
   background-color: var(--pink-panel);
   clip-path: polygon(calc(28.4% - (100dvh / 1440) * 24.50) 0%, calc(28.4% - (100dvh / 1440) * 11.57) 3.7197%, calc(28.4% + (100dvh / 1440) * 0.54) 7.3949%, calc(28.4% + (100dvh / 1440) * 11.01) 10.9814%, calc(28.4% + (100dvh / 1440) * 19.05) 14.4346%, calc(28.4% + (100dvh / 1440) * 23.81) 17.7103%, calc(28.4% + (100dvh / 1440) * 24.50) 20.7639%, calc(28.4% + (100dvh / 1440) * 20.68) 23.5730%, calc(28.4% + (100dvh / 1440) * 13.49) 26.2026%, calc(28.4% + (100dvh / 1440) * 4.46) 28.7398%, calc(28.4% - (100dvh / 1440) * 4.91) 31.2716%, calc(28.4% - (100dvh / 1440) * 13.07) 33.8849%, calc(28.4% - (100dvh / 1440) * 18.50) 36.6667%, calc(28.4% - (100dvh / 1440) * 20.10) 39.6794%, calc(28.4% - (100dvh / 1440) * 18.39) 42.8872%, calc(28.4% - (100dvh / 1440) * 14.34) 46.2294%, calc(28.4% - (100dvh / 1440) * 8.87) 49.6457%, calc(28.4% - (100dvh / 1440) * 2.94) 53.0755%, calc(28.4% + (100dvh / 1440) * 2.50) 56.4583%, calc(28.4% + (100dvh / 1440) * 6.67) 59.7519%, calc(28.4% + (100dvh / 1440) * 9.45) 62.9869%, calc(28.4% + (100dvh / 1440) * 10.89) 66.2122%, calc(28.4% + (100dvh / 1440) * 11.01) 69.4768%, calc(28.4% + (100dvh / 1440) * 9.87) 72.8296%, calc(28.4% + (100dvh / 1440) * 7.50) 76.3194%, calc(28.4% + (100dvh / 1440) * 3.97) 79.9820%, calc(28.4% - (100dvh / 1440) * 0.54) 83.7996%, calc(28.4% - (100dvh / 1440) * 5.84) 87.7412%, calc(28.4% - (100dvh / 1440) * 11.73) 91.7758%, calc(28.4% - (100dvh / 1440) * 18.02) 95.8724%, calc(28.4% - (100dvh / 1440) * 24.50) 100%, 100% 100%, 100% 0%);
+}
+
+.bg-wrap.bg-ready .bg--pink {
+  background-image: url('./assets/bg_pink.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+/* The two backgrounds are wrapped so the first-paint sweep can clip them
+   together as one region — a single left-to-right inset keeps the wave
+   seam intact. The sweep only starts once App.tsx has decoded both SVGs
+   and added `.bg-ready` (which also applies the artwork — see above), so
+   the SVGs' first paint is the sweep itself, never an unguarded pop-in.
+   Reduced motion adds the artwork without the sweep. */
+.bg-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bg-wrap.bg-ready {
+    clip-path: inset(0 100% 0 0);
+    /* expo-out: the leading edge starts at full speed (no hesitant ramp
+       like ease-in) and eases into place at the end, so the sweep reads
+       as a decisive brush stroke instead of a uniform mechanical wipe */
+    animation: bg-sweep 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes bg-sweep {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Mobile (≤960px): the panels split top/bottom, so the artwork draws in
+   from the top edge down instead of left to right. */
+@media (max-width: 960px) and (prefers-reduced-motion: no-preference) {
+  .bg-wrap.bg-ready {
+    clip-path: inset(0 0 100% 0);
+    animation: bg-sweep-vertical 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes bg-sweep-vertical {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 /* ============ Left panel (blue) ============ */
@@ -317,6 +381,53 @@ button {
   box-shadow:
     0 0 0 0.312rem #ffb5d6,
     1.250rem 1.250rem 0 0 rgba(255, 176, 212, 0.4);
+}
+
+/* ============ Profile (about) page ============ */
+/* The about page shows only the passport profile card (references
+   profile.svg), centered in the main panel — no article card chrome on
+   either viewport. A mobile-specific card will replace it later. */
+.profile-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-page img {
+  /* the passport art is drawn at 892 units wide; cap the rendered width
+     at 1200px (75rem at the 1080p design scale, so it follows the rem
+     scaling below 1080p) so the card never blows up on large monitors */
+  max-width: min(100%, 75rem);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  /* the nav buttons' trick: drop-shadow follows the artwork's own alpha
+     shape, so the hard pink shadow tracks the card's outline instead of
+     the rectangular box (box-shadow would include the transparent
+     corners) */
+  filter: drop-shadow(0.875rem 0.875rem 0 rgba(255, 176, 212, 0.4));
+  /* invisible until the SVG asset has loaded — the ready class fades it
+     in softly instead of popping in after a blank gap */
+  opacity: 0;
+}
+
+.profile-page img.profile-page__img--ready {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .profile-page img.profile-page__img--ready {
+    animation: profile-fade 0.35s ease-out;
+  }
+}
+
+@keyframes profile-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.625rem);
+  }
 }
 
 /* ============ Markdown typography ============ */
@@ -788,9 +899,12 @@ button {
 
 
 /* ============ Sidebar bloom on load ============ */
-/* One orchestrated moment: the name card drops in and the nav blossoms
-   open one by one (top to bottom). Plays once per page load — the
-   sidebar persists across routes. Reduced motion skips it entirely. */
+/* One orchestrated moment, once per page load (the sidebar persists
+   across routes): the background sweep finishes, then the name card
+   drops in and the nav blossoms open one by one (top to bottom).
+   Until `.app` is bg-settled the elements hold their bloom start state
+   (invisible) so nothing moves over the drawing sweep. Reduced motion
+   skips it entirely (elements stay visible). */
 @keyframes bloom {
   from {
     opacity: 0;
@@ -799,20 +913,25 @@ button {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .name-card,
-  .nav-item {
+  .app:not(.bg-settled) .name-card,
+  .app:not(.bg-settled) .nav-item {
+    opacity: 0;
+  }
+
+  .app.bg-settled .name-card,
+  .app.bg-settled .nav-item {
     animation: bloom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
   }
 
-  .nav-item:nth-child(1) {
+  .app.bg-settled .nav-item:nth-child(1) {
     animation-delay: 0.10s;
   }
 
-  .nav-item:nth-child(2) {
+  .app.bg-settled .nav-item:nth-child(2) {
     animation-delay: 0.18s;
   }
 
-  .nav-item:nth-child(3) {
+  .app.bg-settled .nav-item:nth-child(3) {
     animation-delay: 0.26s;
   }
 }
@@ -1184,11 +1303,11 @@ button:focus-visible {
     background-size: cover;
   }
 
-  .bg--blue::before {
+  .bg-wrap.bg-ready .bg--blue::before {
     background-image: url('./assets/bg_blue.svg');
   }
 
-  .bg--pink::before {
+  .bg-wrap.bg-ready .bg--pink::before {
     background-image: url('./assets/bg_pink.svg');
   }
 }

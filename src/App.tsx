@@ -1,6 +1,8 @@
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { Navigate, Outlet, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
+import bgBlue from './assets/bg_blue.svg'
+import bgPink from './assets/bg_pink.svg'
 import { prefersReducedMotion } from './motion'
 import HomePage from './pages/HomePage'
 import PostPage from './pages/PostPage'
@@ -88,33 +90,82 @@ function useHideSidebarOnScroll() {
   }, [])
 }
 
+/**
+ * The background artwork pops in as its two SVGs decode, so it is hidden
+ * until both are ready and then drawn in with a fast left-to-right sweep
+ * (see the `.bg-wrap.bg-ready` animation in styles.css). The flat panel
+ * colors below the SVGs are what shows in the meantime.
+ *
+ * Returns `true` once the sweep has finished (or immediately under
+ * reduced motion, where the artwork just appears as it loads). The other
+ * first-load entrance animations — the sidebar bloom and the main fade —
+ * wait for that moment so the page introduces itself in order: background
+ * draws in first, then everything else.
+ */
+function useBgReveal() {
+  const [settled, setSettled] = useState(false)
+  useEffect(() => {
+    // `.bg-ready` both applies the artwork (styles.css) and starts the
+    // sweep, so it is only added after both SVGs are fetched and
+    // decoded — the artwork's first paint is the sweep. Under reduced
+    // motion the artwork is applied the same way but appears without
+    // the sweep as soon as it is decoded.
+    Promise.allSettled([bgBlue, bgPink].map((src) => {
+      const img = new Image()
+      img.src = src
+      return img.decode()
+    })).then(() => {
+      const wrap = document.querySelector('.bg-wrap')
+      if (!wrap) {
+        setSettled(true)
+        return
+      }
+      wrap.classList.add('bg-ready')
+      if (prefersReducedMotion()) {
+        setSettled(true)
+        return
+      }
+      // the sweep is short; the entrance animations start once it ends
+      wrap.addEventListener('animationend', () => setSettled(true), { once: true })
+    })
+  }, [])
+  return settled
+}
+
 export default function App() {
   useUiScale()
   useHideSidebarOnScroll()
+  const bgSettled = useBgReveal()
   const { pathname } = useLocation()
   const locale = localeFromPath(pathname)
 
   // Fade the new page's content in after a route change. Card morph
-  // transitions manage their own fades, so they are skipped.
+  // transitions manage their own fades, so they are skipped. On the
+  // first load the content stays hidden until the background reveal has
+  // settled (bgSettled), so the fade plays after the drawing sweep.
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
     if (document.querySelector('.card-transition')) return
     const main = document.querySelector<HTMLElement>('.main')
     if (!main) return
     main.style.opacity = '0'
+    if (!bgSettled) return
     main.animate([{ opacity: 0 }, { opacity: 1 }], {
       duration: 150,
       easing: 'ease-out',
       fill: 'forwards',
     })
-  }, [pathname])
+  }, [pathname, bgSettled])
   return (
     <LocaleProvider locale={locale}>
-      <div className="app">
+      <div className={`app${bgSettled ? ' bg-settled' : ''}`}>
         {/* Both backgrounds render full-screen and are clipped to their
-            regions (left panel = blue, right panel = pink). */}
-        <div className="bg bg--blue" aria-hidden="true" />
-        <div className="bg bg--pink" aria-hidden="true" />
+            regions (left panel = blue, right panel = pink). The wrapper
+            clips them together so the reveal sweep keeps the wave seam. */}
+        <div className="bg-wrap" aria-hidden="true">
+          <div className="bg bg--blue" />
+          <div className="bg bg--pink" />
+        </div>
         <Sidebar />
         <main className="main">
           <Routes>
