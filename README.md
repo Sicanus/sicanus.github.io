@@ -29,7 +29,7 @@ Your markdown content here...
 ```
 
 `npm run generate` (run automatically by `dev`/`build`) scans the folder,
-sorts posts by `date` (newest first) and writes `src/posts.generated.js`,
+sorts posts by `date` (newest first) and writes `src/posts.generated.ts`,
 which the app imports. The newest visible post is the featured post on the
 home page.
 

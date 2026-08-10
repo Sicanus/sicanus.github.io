@@ -24,6 +24,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run typecheck
       # generate-posts scans src/posts/*.md, reads frontmatter (title,
       # date) and builds the registry ordered by date. VITE_BASE_PATH is
       # the absolute base for GitHub Pages: "/" for a user page
