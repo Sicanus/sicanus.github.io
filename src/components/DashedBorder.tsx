@@ -9,8 +9,19 @@
  * scale below 1080p. Geometry is set via CSS styles (not attributes),
  * which supports calc() with rem units.
  */
-export default function DashedBorder({ left, top, right, bottom, radius, strokeWidth, stroke, dash }) {
-  const num = (v) => parseFloat(v)
+interface DashedBorderProps {
+  left: string
+  top: string
+  right: string
+  bottom: string
+  radius: string
+  strokeWidth: string
+  stroke: string
+  dash: string
+}
+
+export default function DashedBorder({ left, top, right, bottom, radius, strokeWidth, stroke, dash }: DashedBorderProps) {
+  const num = (v: string) => parseFloat(v)
   const sw = num(strokeWidth)
   const insetX = num(left) + sw / 2
   const insetY = num(top) + sw / 2

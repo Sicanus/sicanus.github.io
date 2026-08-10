@@ -15,7 +15,7 @@ const MAX_PAGES = 5
  * Rough plain-text excerpt of a markdown post. Long enough that the
  * CSS line-clamp (3 lines) actually truncates it and appends "…".
  */
-const excerpt = (md) =>
+const excerpt = (md: string) =>
   md
     .replace(/```[\s\S]*?```/g, '')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
@@ -34,7 +34,7 @@ const excerpt = (md) =>
  */
 export default function PostsPage() {
   const visible = posts.filter((post) => !post.hidden)
-  const listRef = useRef(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const [perPage, setPerPage] = useState(3)
   const [page, setPage] = useState(1)
 
@@ -50,7 +50,7 @@ export default function PostsPage() {
       const cs = getComputedStyle(el)
       const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
       const gap = parseFloat(cs.gap) || CARD_GAP
-      const first = el.querySelector('.post-card')
+      const first = el.querySelector<HTMLElement>('.post-card')
       // offsetHeight is the layout height — unlike getBoundingClientRect()
       // it ignores the hover transform scale(1.01), so a hovered card can
       // never shrink the per-page count (which used to happen when the
@@ -75,13 +75,14 @@ export default function PostsPage() {
   useLayoutEffect(() => {
     const t = consumeCardTransition()
     if (!t?.from || !t.slug) return
-    const card = listRef.current?.querySelector(`.post-card[data-slug="${t.slug}"]`)
+    const card = listRef.current?.querySelector<HTMLElement>(`.post-card[data-slug="${t.slug}"]`)
     if (!card) return
     const to = card.getBoundingClientRect()
     // everything except the target post card fades out during the morph:
     // the other cards in the list and the pagination bar. The page title
     // stays visible and only cross-fades its text.
     const main = card.closest('.main')
+    if (!main) return
     const others = [...main.children].flatMap((el) => {
       if (el.classList.contains('page-title')) return []
       return el === card || el.contains(card)
@@ -102,7 +103,7 @@ export default function PostsPage() {
   }, [])
 
   /** Switch page with a short fade/slide-in animation on the list. */
-  const goTo = (n) => {
+  const goTo = (n: number) => {
     if (n === safePage) return
     setPage(n)
     if (prefersReducedMotion()) return

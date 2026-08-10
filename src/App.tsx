@@ -35,9 +35,10 @@ function useHideSidebarOnScroll() {
     const main = document.querySelector('.main')
     const app = document.querySelector('.app')
     if (!main || !app) return
-    let startY = null
+    let startY: number | null = null
     let startInScrollableMd = false
-    const onTouchStart = (e) => {
+    const onTouchStart = (e: Event) => {
+      if (!(e instanceof TouchEvent)) return
       startY = e.touches[0].clientY
       // the whole gesture is classified by its starting point: swipes
       // that begin inside the scrollable markdown card scroll it instead
@@ -51,8 +52,8 @@ function useHideSidebarOnScroll() {
         startInScrollableMd = inside && md.scrollHeight > md.clientHeight
       }
     }
-    const onTouchMove = (e) => {
-      if (startY === null) return
+    const onTouchMove = (e: Event) => {
+      if (startY === null || !(e instanceof TouchEvent)) return
       const dy = e.touches[0].clientY - startY
       if (startInScrollableMd) {
         // inside a scrollable markdown card: an upward swipe hides the
@@ -84,7 +85,7 @@ export default function App() {
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
     if (document.querySelector('.card-transition')) return
-    const main = document.querySelector('.main')
+    const main = document.querySelector<HTMLElement>('.main')
     if (!main) return
     main.style.opacity = '0'
     main.animate([{ opacity: 0 }, { opacity: 1 }], {

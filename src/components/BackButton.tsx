@@ -16,10 +16,10 @@ const CAN_HOVER = window.matchMedia('(hover: hover)').matches
  * Clicking records the article card rect so the posts page can play the
  * shrink-back transition.
  */
-export default function BackButton({ slug }) {
-  const dashRef = useRef(null)
+export default function BackButton({ slug }: { slug?: string }) {
+  const dashRef = useRef<HTMLSpanElement>(null)
 
-  const spin = (dir) => {
+  const spin = (dir: 'in' | 'out') => {
     const el = dashRef.current
     if (!el) return
     el.getAnimations().forEach((a) => a.cancel())

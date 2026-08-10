@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import type { MouseEvent } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import DashedBorder from './DashedBorder'
 import { beginCardTransition } from '../transition'
@@ -19,17 +20,30 @@ const CAN_HOVER = window.matchMedia('(hover: hover)').matches
  * back. The spin runs via the Web Animations API so the element is never
  * rebuilt (rebuilding between mousedown/mouseup would swallow the click).
  */
-function NavItem({ item, row, col }) {
-  const flowerRef = useRef(null)
-  const linkRef = useRef(null)
+interface NavItemDef {
+  to: string
+  label: string
+  icon: string
+  end: boolean
+}
+
+interface GridCell {
+  item: NavItemDef
+  row: number
+  col: number
+}
+
+function NavItem({ item, row, col }: GridCell) {
+  const flowerRef = useRef<HTMLSpanElement>(null)
+  const linkRef = useRef<HTMLAnchorElement>(null)
   const [touched, setTouched] = useState(false)
-  const prevTouched = useRef(null)
+  const prevTouched = useRef<boolean | null>(null)
   const navigate = useNavigate()
   const location = useLocation()
   // reading an article keeps the Posts button highlighted
   const isPostSlug = location.pathname.startsWith('/post/')
 
-  const spin = (dir) => {
+  const spin = (dir: 'in' | 'out') => {
     const el = flowerRef.current
     if (!el) return
     el.getAnimations().forEach((a) => a.cancel())
@@ -57,8 +71,10 @@ function NavItem({ item, row, col }) {
   // (prevTouched guards the initial mount so no spurious spin-back plays.)
   useEffect(() => {
     if (CAN_HOVER) return
-    const outside = (e) => {
-      if (!linkRef.current?.contains(e.target)) setTouched(false)
+    const outside = (e: TouchEvent) => {
+      const t = e.target
+      if (t instanceof Node && linkRef.current?.contains(t)) return
+      setTouched(false)
     }
     document.addEventListener('touchstart', outside, { passive: true })
     return () => document.removeEventListener('touchstart', outside)
@@ -73,7 +89,7 @@ function NavItem({ item, row, col }) {
     prevTouched.current = touched
   }, [touched])
 
-  const handleClick = (e) => {
+  const handleClick = (e: MouseEvent) => {
     // clicking the button of the page we're already on: do nothing
     // (the fade-out would leave the page blank since the route doesn't
     // change)
@@ -167,7 +183,7 @@ function NavItem({ item, row, col }) {
  * name card on top. Shadows, dashes and strokes match blog.fig exactly.
  */
 export default function Sidebar() {
-  const navItems = [
+  const navItems: NavItemDef[] = [
     { to: '/', label: 'ホーム', icon: 'fa-solid fa-house', end: true },
     { to: '/posts', label: '記事', icon: 'fa-solid fa-book-open', end: false },
     { to: '/about', label: 'プロフ', icon: 'fa-solid fa-heart', end: false },

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
  * Renders markdown with the blog's typography. h1 is the "markdown title"
  * (pink, extra-bold) and paragraphs use the body style from the Figma design.
  */
-export default function MarkdownView({ content, date }) {
+export default function MarkdownView({ content, date }: { content: string; date: string }) {
   return (
     <div className="markdown">
       {date && <p className="post-date">{date}</p>}

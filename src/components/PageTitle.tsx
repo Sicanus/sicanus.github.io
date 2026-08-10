@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 /**
  * Page header from the Figma: blue fill, 5px white outside stroke and a
  * hard drop shadow (4,4) at 30% #f883ae. The Figma effect projects the
@@ -5,7 +7,7 @@
  * visible as a ~4px ring just outside the white stroke. Recreated with
  * three layers: shadow (pink stroke, offset 4,4) → stroke → fill.
  */
-export default function PageTitle({ children }) {
+export default function PageTitle({ children }: { children: ReactNode }) {
   return (
     <h1 className="page-title">
       <span className="page-title__shadow" aria-hidden="true">

@@ -6,14 +6,24 @@ import PageTitle from '../components/PageTitle'
 import BackButton from '../components/BackButton'
 import { featuredPost } from '../posts'
 
+interface MenuState {
+  x: number
+  y: number
+  selectedText: string
+}
+
 export default function HomePage() {
-  const [menu, setMenu] = useState(null)
+  const [menu, setMenu] = useState<MenuState | null>(null)
+
+  // all posts hidden (or none generated) — nothing to feature
+  const post = featuredPost
+  if (!post) return null
 
   return (
     <>
       <div className="title-row">
         <BackButton />
-        <PageTitle>{featuredPost.title}</PageTitle>
+        <PageTitle>{post.title}</PageTitle>
         <span className="title-row__spacer" aria-hidden="true" />
       </div>
       <div
@@ -39,13 +49,13 @@ export default function HomePage() {
           stroke="#ffbad3"
           dash="0.625rem 0.625rem"
         />
-        <MarkdownView content={featuredPost.content} date={featuredPost.date} />
+        <MarkdownView content={post.content} date={post.date} />
       </div>
       {menu && (
         <ContextMenu
           x={menu.x}
           y={menu.y}
-          post={featuredPost}
+          post={post}
           selectedText={menu.selectedText}
           onClose={() => setMenu(null)}
         />

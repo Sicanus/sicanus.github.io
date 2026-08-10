@@ -8,11 +8,17 @@ import BackButton from '../components/BackButton'
 import { getPost } from '../posts'
 import { consumeCardTransition, runCardTransition } from '../transition'
 
-export default function PostPage({ slug: propSlug }) {
+interface MenuState {
+  x: number
+  y: number
+  selectedText: string
+}
+
+export default function PostPage({ slug: propSlug }: { slug?: string }) {
   const { slug: paramSlug } = useParams()
-  const slug = propSlug ?? paramSlug
-  const [menu, setMenu] = useState(null)
-  const cardRef = useRef(null)
+  const slug = propSlug ?? paramSlug ?? ''
+  const [menu, setMenu] = useState<MenuState | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const post = getPost(slug)
 
   // Coming from the posts list: grow the floating card from the clicked
@@ -26,10 +32,12 @@ export default function PostPage({ slug: propSlug }) {
     const to = card.getBoundingClientRect()
     // everything except the article card fades out during the morph;
     // the title row stays visible and only cross-fades its text
-    const others = [...card.parentElement.children].filter(
+    const parent = card.parentElement
+    if (!parent) return
+    const others = [...parent.children].filter(
       (el) => el !== card && !el.classList.contains('title-row')
     )
-    const titleRow = card.parentElement.querySelector('.title-row')
+    const titleRow = parent.querySelector('.title-row')
     if (titleRow) {
       titleRow.animate([{ opacity: 0 }, { opacity: 1 }], {
         duration: 150,

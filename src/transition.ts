@@ -14,14 +14,19 @@ import { prefersReducedMotion } from './motion'
  * at the final frame the overlay's outline coincides with the card's —
  * removing it is seamless.
  */
-const pending = { from: null, slug: null }
+interface PendingTransition {
+  from: DOMRect | null
+  slug: string | null
+}
 
-export const beginCardTransition = (from, slug) => {
+const pending: PendingTransition = { from: null, slug: null }
+
+export const beginCardTransition = (from: DOMRect, slug?: string | null): void => {
   pending.from = from
   pending.slug = slug ?? null
 }
 
-export const consumeCardTransition = () => {
+export const consumeCardTransition = (): PendingTransition | null => {
   if (!pending.from) return null
   const v = { from: pending.from, slug: pending.slug }
   pending.from = null
@@ -36,7 +41,13 @@ export const consumeCardTransition = () => {
  * out as the animation starts and fade back in when it completes, so the
  * card morph is the only visual focus; `done` runs after completion.
  */
-export function runCardTransition(from, to, targetEl, fadeEls, done) {
+export function runCardTransition(
+  from: DOMRect,
+  to: DOMRect,
+  targetEl: HTMLElement | null,
+  fadeEls: Element[],
+  done?: () => void
+): void {
   // reduced motion: navigate without the morph — the destination card
   // is already mounted and visible behind the (skipped) overlay
   if (prefersReducedMotion()) {
