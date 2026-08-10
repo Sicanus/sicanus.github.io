@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "generate": "node scripts/generate-posts.js",
+    "typecheck": "tsc --noEmit",
     "dev": "npm run generate && vite",
     "build": "npm run generate && vite build",
     "preview": "vite preview"
@@ -19,7 +20,10 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^4.5.0",
+    "typescript": "^7.0.2",
     "vite": "^7.0.0"
   }
 }
