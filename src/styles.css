@@ -57,8 +57,12 @@ button {
 }
 
 /* Backgrounds: both SVGs render full-screen (they overlap completely) and
-   clip-path assigns each one its region — blue on the left 34.062rem panel,
-   pink on the rest. */
+   clip-path assigns each one its region — blue on the left 28.4% panel,
+   pink on the rest. The boundary follows the wavy edge of the wave.svg
+   reference (sampled into a polygon). The amplitude scales with the
+   viewport (100dvh/1440 on desktop; 100vw/1440 on mobile, ×1.2 for more
+   presence) so the wave keeps the reference's amplitude:spacing ratio at
+   every size. */
 .bg {
   position: absolute;
   inset: 0;
@@ -69,15 +73,15 @@ button {
   background: url('./assets/bg_blue.svg') no-repeat center;
   background-size: cover;
   background-color: var(--blue-panel);
-  /* split at the same 28.4% as the sidebar */
-  clip-path: inset(0 71.6% 0 0);
+  /* wave seam at the same 28.4% as the sidebar */
+  clip-path: polygon(0% 0%, calc(28.4% - (100dvh / 1440) * 24.50) 0%, calc(28.4% - (100dvh / 1440) * 11.57) 3.7197%, calc(28.4% + (100dvh / 1440) * 0.54) 7.3949%, calc(28.4% + (100dvh / 1440) * 11.01) 10.9814%, calc(28.4% + (100dvh / 1440) * 19.05) 14.4346%, calc(28.4% + (100dvh / 1440) * 23.81) 17.7103%, calc(28.4% + (100dvh / 1440) * 24.50) 20.7639%, calc(28.4% + (100dvh / 1440) * 20.68) 23.5730%, calc(28.4% + (100dvh / 1440) * 13.49) 26.2026%, calc(28.4% + (100dvh / 1440) * 4.46) 28.7398%, calc(28.4% - (100dvh / 1440) * 4.91) 31.2716%, calc(28.4% - (100dvh / 1440) * 13.07) 33.8849%, calc(28.4% - (100dvh / 1440) * 18.50) 36.6667%, calc(28.4% - (100dvh / 1440) * 20.10) 39.6794%, calc(28.4% - (100dvh / 1440) * 18.39) 42.8872%, calc(28.4% - (100dvh / 1440) * 14.34) 46.2294%, calc(28.4% - (100dvh / 1440) * 8.87) 49.6457%, calc(28.4% - (100dvh / 1440) * 2.94) 53.0755%, calc(28.4% + (100dvh / 1440) * 2.50) 56.4583%, calc(28.4% + (100dvh / 1440) * 6.67) 59.7519%, calc(28.4% + (100dvh / 1440) * 9.45) 62.9869%, calc(28.4% + (100dvh / 1440) * 10.89) 66.2122%, calc(28.4% + (100dvh / 1440) * 11.01) 69.4768%, calc(28.4% + (100dvh / 1440) * 9.87) 72.8296%, calc(28.4% + (100dvh / 1440) * 7.50) 76.3194%, calc(28.4% + (100dvh / 1440) * 3.97) 79.9820%, calc(28.4% - (100dvh / 1440) * 0.54) 83.7996%, calc(28.4% - (100dvh / 1440) * 5.84) 87.7412%, calc(28.4% - (100dvh / 1440) * 11.73) 91.7758%, calc(28.4% - (100dvh / 1440) * 18.02) 95.8724%, calc(28.4% - (100dvh / 1440) * 24.50) 100%, 0% 100%);
 }
 
 .bg--pink {
   background: url('./assets/bg_pink.svg') no-repeat center;
   background-size: cover;
   background-color: var(--pink-panel);
-  clip-path: inset(0 0 0 28.4%);
+  clip-path: polygon(calc(28.4% - (100dvh / 1440) * 24.50) 0%, calc(28.4% - (100dvh / 1440) * 11.57) 3.7197%, calc(28.4% + (100dvh / 1440) * 0.54) 7.3949%, calc(28.4% + (100dvh / 1440) * 11.01) 10.9814%, calc(28.4% + (100dvh / 1440) * 19.05) 14.4346%, calc(28.4% + (100dvh / 1440) * 23.81) 17.7103%, calc(28.4% + (100dvh / 1440) * 24.50) 20.7639%, calc(28.4% + (100dvh / 1440) * 20.68) 23.5730%, calc(28.4% + (100dvh / 1440) * 13.49) 26.2026%, calc(28.4% + (100dvh / 1440) * 4.46) 28.7398%, calc(28.4% - (100dvh / 1440) * 4.91) 31.2716%, calc(28.4% - (100dvh / 1440) * 13.07) 33.8849%, calc(28.4% - (100dvh / 1440) * 18.50) 36.6667%, calc(28.4% - (100dvh / 1440) * 20.10) 39.6794%, calc(28.4% - (100dvh / 1440) * 18.39) 42.8872%, calc(28.4% - (100dvh / 1440) * 14.34) 46.2294%, calc(28.4% - (100dvh / 1440) * 8.87) 49.6457%, calc(28.4% - (100dvh / 1440) * 2.94) 53.0755%, calc(28.4% + (100dvh / 1440) * 2.50) 56.4583%, calc(28.4% + (100dvh / 1440) * 6.67) 59.7519%, calc(28.4% + (100dvh / 1440) * 9.45) 62.9869%, calc(28.4% + (100dvh / 1440) * 10.89) 66.2122%, calc(28.4% + (100dvh / 1440) * 11.01) 69.4768%, calc(28.4% + (100dvh / 1440) * 9.87) 72.8296%, calc(28.4% + (100dvh / 1440) * 7.50) 76.3194%, calc(28.4% + (100dvh / 1440) * 3.97) 79.9820%, calc(28.4% - (100dvh / 1440) * 0.54) 83.7996%, calc(28.4% - (100dvh / 1440) * 5.84) 87.7412%, calc(28.4% - (100dvh / 1440) * 11.73) 91.7758%, calc(28.4% - (100dvh / 1440) * 18.02) 95.8724%, calc(28.4% - (100dvh / 1440) * 24.50) 100%, 100% 100%, 100% 0%);
 }
 
 /* ============ Left panel (blue) ============ */
@@ -884,11 +888,12 @@ button:focus-visible {
      split is top/bottom — the blue region is just the sidebar's content
      (name card + nav row) plus a little extra */
   .bg--blue {
-    clip-path: inset(0 0 calc(100% - var(--sidebar-h)) 0);
+    /* same wavy boundary, rotated: the wave straddles the horizontal seam */
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(var(--sidebar-h) + (100vw / 1440) * 29.40), 95.8724% calc(var(--sidebar-h) + (100vw / 1440) * 21.62), 91.7758% calc(var(--sidebar-h) + (100vw / 1440) * 14.08), 87.7412% calc(var(--sidebar-h) + (100vw / 1440) * 7.00), 83.7996% calc(var(--sidebar-h) + (100vw / 1440) * 0.64), 79.9820% calc(var(--sidebar-h) - (100vw / 1440) * 4.77), 76.3194% calc(var(--sidebar-h) - (100vw / 1440) * 9.00), 72.8296% calc(var(--sidebar-h) - (100vw / 1440) * 11.84), 69.4768% calc(var(--sidebar-h) - (100vw / 1440) * 13.21), 66.2122% calc(var(--sidebar-h) - (100vw / 1440) * 13.06), 62.9869% calc(var(--sidebar-h) - (100vw / 1440) * 11.35), 59.7519% calc(var(--sidebar-h) - (100vw / 1440) * 8.01), 56.4583% calc(var(--sidebar-h) - (100vw / 1440) * 3.00), 53.0755% calc(var(--sidebar-h) + (100vw / 1440) * 3.53), 49.6457% calc(var(--sidebar-h) + (100vw / 1440) * 10.64), 46.2294% calc(var(--sidebar-h) + (100vw / 1440) * 17.20), 42.8872% calc(var(--sidebar-h) + (100vw / 1440) * 22.07), 39.6794% calc(var(--sidebar-h) + (100vw / 1440) * 24.12), 36.6667% calc(var(--sidebar-h) + (100vw / 1440) * 22.20), 33.8849% calc(var(--sidebar-h) + (100vw / 1440) * 15.68), 31.2716% calc(var(--sidebar-h) + (100vw / 1440) * 5.89), 28.7398% calc(var(--sidebar-h) - (100vw / 1440) * 5.35), 26.2026% calc(var(--sidebar-h) - (100vw / 1440) * 16.19), 23.5730% calc(var(--sidebar-h) - (100vw / 1440) * 24.82), 20.7639% calc(var(--sidebar-h) - (100vw / 1440) * 29.40), 17.7103% calc(var(--sidebar-h) - (100vw / 1440) * 28.58), 14.4346% calc(var(--sidebar-h) - (100vw / 1440) * 22.85), 10.9814% calc(var(--sidebar-h) - (100vw / 1440) * 13.22), 7.3949% calc(var(--sidebar-h) - (100vw / 1440) * 0.64), 3.7197% calc(var(--sidebar-h) + (100vw / 1440) * 13.89), 0% calc(var(--sidebar-h) + (100vw / 1440) * 29.40));
   }
 
   .bg--pink {
-    clip-path: inset(var(--sidebar-h) 0 0 0);
+    clip-path: polygon(0% calc(var(--sidebar-h) + (100vw / 1440) * 29.40), 3.7197% calc(var(--sidebar-h) + (100vw / 1440) * 13.89), 7.3949% calc(var(--sidebar-h) - (100vw / 1440) * 0.64), 10.9814% calc(var(--sidebar-h) - (100vw / 1440) * 13.22), 14.4346% calc(var(--sidebar-h) - (100vw / 1440) * 22.85), 17.7103% calc(var(--sidebar-h) - (100vw / 1440) * 28.58), 20.7639% calc(var(--sidebar-h) - (100vw / 1440) * 29.40), 23.5730% calc(var(--sidebar-h) - (100vw / 1440) * 24.82), 26.2026% calc(var(--sidebar-h) - (100vw / 1440) * 16.19), 28.7398% calc(var(--sidebar-h) - (100vw / 1440) * 5.35), 31.2716% calc(var(--sidebar-h) + (100vw / 1440) * 5.89), 33.8849% calc(var(--sidebar-h) + (100vw / 1440) * 15.68), 36.6667% calc(var(--sidebar-h) + (100vw / 1440) * 22.20), 39.6794% calc(var(--sidebar-h) + (100vw / 1440) * 24.12), 42.8872% calc(var(--sidebar-h) + (100vw / 1440) * 22.07), 46.2294% calc(var(--sidebar-h) + (100vw / 1440) * 17.20), 49.6457% calc(var(--sidebar-h) + (100vw / 1440) * 10.64), 53.0755% calc(var(--sidebar-h) + (100vw / 1440) * 3.53), 56.4583% calc(var(--sidebar-h) - (100vw / 1440) * 3.00), 59.7519% calc(var(--sidebar-h) - (100vw / 1440) * 8.01), 62.9869% calc(var(--sidebar-h) - (100vw / 1440) * 11.35), 66.2122% calc(var(--sidebar-h) - (100vw / 1440) * 13.06), 69.4768% calc(var(--sidebar-h) - (100vw / 1440) * 13.21), 72.8296% calc(var(--sidebar-h) - (100vw / 1440) * 11.84), 76.3194% calc(var(--sidebar-h) - (100vw / 1440) * 9.00), 79.9820% calc(var(--sidebar-h) - (100vw / 1440) * 4.77), 83.7996% calc(var(--sidebar-h) + (100vw / 1440) * 0.64), 87.7412% calc(var(--sidebar-h) + (100vw / 1440) * 7.00), 91.7758% calc(var(--sidebar-h) + (100vw / 1440) * 14.08), 95.8724% calc(var(--sidebar-h) + (100vw / 1440) * 21.62), 100% calc(var(--sidebar-h) + (100vw / 1440) * 29.40), 100% 100%, 0% 100%);
   }
 
   :root {
@@ -1156,5 +1161,34 @@ button:focus-visible {
   .markdown__title {
     font-size: 1.875rem;
     margin-bottom: 1.000rem;
+  }
+}
+
+/* Portrait phones: under cover the 16:9 artwork would only show its center
+   strip, so rotate both backgrounds 90° (to 9:16) — a 100dvh×100dvw pseudo
+   rotated to exactly cover the viewport shows most of the artwork instead.
+   Landscape phones already show most of the artwork and keep the unrotated
+   version. */
+@media (max-width: 960px) and (orientation: portrait) {
+  .bg--blue::before,
+  .bg--pink::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100dvh;
+    height: 100dvw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .bg--blue::before {
+    background-image: url('./assets/bg_blue.svg');
+  }
+
+  .bg--pink::before {
+    background-image: url('./assets/bg_pink.svg');
   }
 }
