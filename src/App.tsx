@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Navigate, Outlet, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import bgBlue from './assets/bg_blue.svg'
@@ -93,14 +93,14 @@ function useHideSidebarOnScroll() {
 /**
  * The background artwork pops in as its two SVGs decode, so it is hidden
  * until both are ready and then drawn in with a fast left-to-right sweep
- * (see the `.bg-wrap.bg-ready` animation in styles.css). The flat panel
- * colors below the SVGs are what shows in the meantime.
+ * (see the `.bg-wrap.bg-ready` animation in styles.css). Until then the
+ * panels stay transparent and the page is blank.
  *
  * Returns `true` once the sweep has finished (or immediately under
  * reduced motion, where the artwork just appears as it loads). The other
  * first-load entrance animations — the sidebar bloom and the main fade —
  * wait for that moment so the page introduces itself in order: background
- * draws in first, then everything else.
+ * draws in first, then the sidebar blooms, then the page content fades in.
  */
 function useBgReveal() {
   const [settled, setSettled] = useState(false)
@@ -142,7 +142,10 @@ export default function App() {
   // Fade the new page's content in after a route change. Card morph
   // transitions manage their own fades, so they are skipped. On the
   // first load the content stays hidden until the background reveal has
-  // settled (bgSettled), so the fade plays after the drawing sweep.
+  // settled (bgSettled) — and then until the sidebar bloom finishes — so
+  // the entrance is the same fade a later page switch plays, queued
+  // behind the nav appearing first instead of alongside it.
+  const introPlayedRef = useRef(false)
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
     if (document.querySelector('.card-transition')) return
@@ -150,11 +153,35 @@ export default function App() {
     if (!main) return
     main.style.opacity = '0'
     if (!bgSettled) return
-    main.animate([{ opacity: 0 }, { opacity: 1 }], {
-      duration: 150,
-      easing: 'ease-out',
-      fill: 'forwards',
-    })
+    const fadeIn = () => {
+      main.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 150,
+        easing: 'ease-out',
+        fill: 'forwards',
+      })
+    }
+    if (!introPlayedRef.current) {
+      // first load: the sidebar bloom (styles.css) starts when `.app`
+      // turns bg-settled; hold the content hidden until the last nav item
+      // has finished, then play the page-switch fade. The listener sits
+      // on the nav grid — its children persist across re-renders.
+      const navGrid = document.querySelector('.nav-grid')
+      if (!navGrid) return
+      const onBloomEnd = (e: AnimationEvent) => {
+        // only the last nav item's bloom counts — the earlier items fire
+        // animationend first and must not consume the listener
+        const t = e.target
+        if (!(t instanceof Element) || t !== navGrid.lastElementChild) return
+        if (e.animationName !== 'bloom') return
+        navGrid.removeEventListener('animationend', onBloomEnd)
+        if (introPlayedRef.current) return
+        introPlayedRef.current = true
+        fadeIn()
+      }
+      navGrid.addEventListener('animationend', onBloomEnd)
+      return
+    }
+    fadeIn()
   }, [pathname, bgSettled])
   return (
     <LocaleProvider locale={locale}>

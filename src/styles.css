@@ -1,7 +1,5 @@
 /* ============ Design tokens (from blog.fig) ============ */
 :root {
-  --blue-panel: #95ccf2; /* behind bg_blue.svg */
-  --pink-panel: #ffcddc; /* behind bg_pink.svg */
   --ink-pink: #ffa2b5; /* blog name, markdown h1 */
   --dash-pink: #ffbad3; /* dashed outlines on cards */
   --ink-blue: #62b8f3; /* page title */
@@ -70,8 +68,8 @@ button {
 }
 
 .bg--blue {
-  /* flat panel until the artwork is applied (see the .bg-ready rules) */
-  background-color: var(--blue-panel);
+  /* no paint at all until `.bg-ready` applies the artwork (see below), so
+     the page stays blank while the SVGs load */
   /* wave seam at the same 28.4% as the sidebar */
   clip-path: polygon(0% 0%, calc(28.4% - (100dvh / 1440) * 24.50) 0%, calc(28.4% - (100dvh / 1440) * 11.57) 3.7197%, calc(28.4% + (100dvh / 1440) * 0.54) 7.3949%, calc(28.4% + (100dvh / 1440) * 11.01) 10.9814%, calc(28.4% + (100dvh / 1440) * 19.05) 14.4346%, calc(28.4% + (100dvh / 1440) * 23.81) 17.7103%, calc(28.4% + (100dvh / 1440) * 24.50) 20.7639%, calc(28.4% + (100dvh / 1440) * 20.68) 23.5730%, calc(28.4% + (100dvh / 1440) * 13.49) 26.2026%, calc(28.4% + (100dvh / 1440) * 4.46) 28.7398%, calc(28.4% - (100dvh / 1440) * 4.91) 31.2716%, calc(28.4% - (100dvh / 1440) * 13.07) 33.8849%, calc(28.4% - (100dvh / 1440) * 18.50) 36.6667%, calc(28.4% - (100dvh / 1440) * 20.10) 39.6794%, calc(28.4% - (100dvh / 1440) * 18.39) 42.8872%, calc(28.4% - (100dvh / 1440) * 14.34) 46.2294%, calc(28.4% - (100dvh / 1440) * 8.87) 49.6457%, calc(28.4% - (100dvh / 1440) * 2.94) 53.0755%, calc(28.4% + (100dvh / 1440) * 2.50) 56.4583%, calc(28.4% + (100dvh / 1440) * 6.67) 59.7519%, calc(28.4% + (100dvh / 1440) * 9.45) 62.9869%, calc(28.4% + (100dvh / 1440) * 10.89) 66.2122%, calc(28.4% + (100dvh / 1440) * 11.01) 69.4768%, calc(28.4% + (100dvh / 1440) * 9.87) 72.8296%, calc(28.4% + (100dvh / 1440) * 7.50) 76.3194%, calc(28.4% + (100dvh / 1440) * 3.97) 79.9820%, calc(28.4% - (100dvh / 1440) * 0.54) 83.7996%, calc(28.4% - (100dvh / 1440) * 5.84) 87.7412%, calc(28.4% - (100dvh / 1440) * 11.73) 91.7758%, calc(28.4% - (100dvh / 1440) * 18.02) 95.8724%, calc(28.4% - (100dvh / 1440) * 24.50) 100%, 0% 100%);
 }
@@ -79,7 +77,7 @@ button {
 /* The artwork's background-image is only applied once `.bg-ready` exists
    (App.tsx adds it after both SVGs are decoded), so the SVGs can never
    paint before the sweep starts — their first paint IS the sweep. Until
-   then only the flat panel colors above show. */
+   then the panels stay transparent and the page is blank. */
 .bg-wrap.bg-ready .bg--blue {
   background-image: url('./assets/bg_blue.svg');
   background-repeat: no-repeat;
@@ -88,8 +86,8 @@ button {
 }
 
 .bg--pink {
-  /* flat panel until the artwork is applied (see the .bg-ready rules) */
-  background-color: var(--pink-panel);
+  /* no paint at all until `.bg-ready` applies the artwork (see above), so
+     the page stays blank while the SVGs load */
   clip-path: polygon(calc(28.4% - (100dvh / 1440) * 24.50) 0%, calc(28.4% - (100dvh / 1440) * 11.57) 3.7197%, calc(28.4% + (100dvh / 1440) * 0.54) 7.3949%, calc(28.4% + (100dvh / 1440) * 11.01) 10.9814%, calc(28.4% + (100dvh / 1440) * 19.05) 14.4346%, calc(28.4% + (100dvh / 1440) * 23.81) 17.7103%, calc(28.4% + (100dvh / 1440) * 24.50) 20.7639%, calc(28.4% + (100dvh / 1440) * 20.68) 23.5730%, calc(28.4% + (100dvh / 1440) * 13.49) 26.2026%, calc(28.4% + (100dvh / 1440) * 4.46) 28.7398%, calc(28.4% - (100dvh / 1440) * 4.91) 31.2716%, calc(28.4% - (100dvh / 1440) * 13.07) 33.8849%, calc(28.4% - (100dvh / 1440) * 18.50) 36.6667%, calc(28.4% - (100dvh / 1440) * 20.10) 39.6794%, calc(28.4% - (100dvh / 1440) * 18.39) 42.8872%, calc(28.4% - (100dvh / 1440) * 14.34) 46.2294%, calc(28.4% - (100dvh / 1440) * 8.87) 49.6457%, calc(28.4% - (100dvh / 1440) * 2.94) 53.0755%, calc(28.4% + (100dvh / 1440) * 2.50) 56.4583%, calc(28.4% + (100dvh / 1440) * 6.67) 59.7519%, calc(28.4% + (100dvh / 1440) * 9.45) 62.9869%, calc(28.4% + (100dvh / 1440) * 10.89) 66.2122%, calc(28.4% + (100dvh / 1440) * 11.01) 69.4768%, calc(28.4% + (100dvh / 1440) * 9.87) 72.8296%, calc(28.4% + (100dvh / 1440) * 7.50) 76.3194%, calc(28.4% + (100dvh / 1440) * 3.97) 79.9820%, calc(28.4% - (100dvh / 1440) * 0.54) 83.7996%, calc(28.4% - (100dvh / 1440) * 5.84) 87.7412%, calc(28.4% - (100dvh / 1440) * 11.73) 91.7758%, calc(28.4% - (100dvh / 1440) * 18.02) 95.8724%, calc(28.4% - (100dvh / 1440) * 24.50) 100%, 100% 100%, 100% 0%);
 }
 
@@ -911,9 +909,12 @@ button {
 /* One orchestrated moment, once per page load (the sidebar persists
    across routes): the background sweep finishes, then the name card
    drops in and the nav blossoms open one by one (top to bottom).
-   Until `.app` is bg-settled the elements hold their bloom start state
-   (invisible) so nothing moves over the drawing sweep. Reduced motion
-   skips it entirely (elements stay visible). */
+   The page content's entrance fade waits for the bloom's last nav item
+   (App.tsx listens for its animationend), so it plays afterwards like a
+   regular page switch instead of alongside the nav. Until `.app` is
+   bg-settled the elements hold their bloom start state (invisible) so
+   nothing moves over the drawing sweep. Reduced motion skips it
+   entirely (elements stay visible). */
 @keyframes bloom {
   from {
     opacity: 0;
