@@ -165,7 +165,7 @@ export default function App() {
       // turns bg-settled; hold the content hidden until the last nav item
       // has finished, then play the page-switch fade. The listener sits
       // on the nav grid — its children persist across re-renders.
-      const navGrid = document.querySelector('.nav-grid')
+      const navGrid = document.querySelector<HTMLElement>('.nav-grid')
       if (!navGrid) return
       const onBloomEnd = (e: AnimationEvent) => {
         // only the last nav item's bloom counts — the earlier items fire
