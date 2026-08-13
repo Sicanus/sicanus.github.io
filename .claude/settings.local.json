@@ -44,5 +44,8 @@
       "Bash(pkill -f \"vite\")",
       "Bash(npx tsc *)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "graft"
+  ]
 }

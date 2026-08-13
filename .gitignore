@@ -5,3 +5,6 @@ dist
 AGENTS.md
 CLAUDE.md
 references_assets
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+graft/
